@@ -1,0 +1,9 @@
+充分利用题目提供的源码，发现漏洞的方式不只有一种。修改并运行源码，看看有没有非预期的行为。
+下面的网址可能对你有帮助：
+https://cppinsights.io/
+https://zh.cppreference.com/w/cpp/string/basic_string
+https://zh.cppreference.com/w/cpp/string/basic_string_view
+
+2.
+利用漏洞，执行题目源码中的system("/readflag");就可以拿到flag。
+下面的网址可能对解题有所帮助：https://github.com/google/sanitizers/wiki/AddressSanitizer
