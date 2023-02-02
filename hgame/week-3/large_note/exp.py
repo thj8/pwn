@@ -1,11 +1,11 @@
 from pwn import *
 
 context.log_level = 'debug'
-context.terminal = ["/usr/bin/tmux", "sp", "-h"]
+#context.terminal = ["/usr/bin/tmux", "sp", "-h"]
 
 f_debug = False if "remote" in sys.argv else True
 
-vuln_name = "./vuln"
+vuln_name = "./vuln_patch"
 libc_path = "./2.32-0ubuntu3.2_amd64/libc.so.6"
 
 elf, rop = ELF(vuln_name), ROP(vuln_name)

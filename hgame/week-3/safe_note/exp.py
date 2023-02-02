@@ -8,7 +8,6 @@ debug = True
 elf = ELF("./vuln")
 libc = ELF("./2.32-0ubuntu3.2_amd64/libc.so.6")
 if debug:
-    io = process("./vuln")
     io = process(["./2.32-0ubuntu3.2_amd64/ld-2.32.so", "./vuln"],
                  env={'LD_PRELOAD': './2.32-0ubuntu3.2_amd64/libc.so.6'})
 else:
