@@ -1,5 +1,4 @@
 from pwn import *
-import time
 
 context.log_level = 'debug'
 #context.terminal = ["/usr/bin/tmux", "sp", "-h"]
