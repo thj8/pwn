@@ -4,27 +4,28 @@ import time
 context.log_level = 'debug'
 #context.terminal = ["/usr/bin/tmux", "sp", "-h"]
 
-f_debug = False if "remote" in sys.argv else True
+f_remote = True if "remote" in sys.argv else False
 f_gdb = True if "gdb" in sys.argv else False
 
-vuln_name = "./pwn"
+vuln_path = "./pwn"
 libc_path = "./libc.so.6"
 
-elf, rop = ELF(vuln_name), ROP(vuln_name)
+elf, rop = ELF(vuln_path), ROP(vuln_path)
 libc, roplibc = ELF(libc_path), ROP(libc_path)
 
-if f_debug:
-    #io = process(vuln_name)
-    io = process(["/glibc-all-in-one/libs/2.31-0ubuntu9.9_amd64/ld-2.31.so", vuln_name],
-                 env={"LD_PRELOAD": "./libc.so.6"})
+if not f_remote:
+    # io = process(vuln_path)
+    io = process(["/glibc-all-in-one/libs/2.31-0ubuntu9.9_amd64/ld-2.31.so", vuln_path], env={"LD_PRELOAD": libc_path})
 else:
     io = remote("tcp.cloud.dasctf.com", 21495)
 
 
 def ddebug(b=""):
-    if f_gdb:
-        gdb.attach(io, gdbscript=b)
-        pause()
+    if not f_gdb:
+        return
+
+    gdb.attach(io, gdbscript=b)
+    pause()
 
 
 # leack stack
