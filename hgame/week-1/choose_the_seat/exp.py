@@ -42,7 +42,7 @@ libcbase = libcbase_printf - libc.symbols['printf']
 log.info(hex(libcbase_printf))
 log.info(hex(libcbase))
 
-tdebug()
+# tdebug()
 io.recv()
 
 #0xe3afe execve("/bin/sh", r15, r12)

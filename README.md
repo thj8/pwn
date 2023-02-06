@@ -1,8 +1,11 @@
 # Goal
 learn pwn for fun, and pwn **easy** challenge only
 
-# Channenges
+# Challenge
 
 | Event | Title | Status | WP | Remark |
 | ----- | ----- | ------ | -- | ------ |
-| HGAME-week-1 | simple_shellcode | Solved | [Click](https://github.com/thj8/pwn/tree/main/hgame/week-1/simple_shellcode) | Read a shellcode and run it |
+| HGAME-week-2| choose the seat | Solved | [Click](https://github.com/thj8/pwn/tree/main/hgame/week-1/choose_the_seat) | run binary again, leak libc, onegadget |
+| HGAME-week0 | overflow | Solved | [Click](https://github.com/thj8/pwn/tree/main/hgame/week-1/overflow) | overflow to backdoor |
+| HGAME-week-1 | orw | Solved | [Click](https://github.com/thj8/pwn/tree/main/hgame/week-1/orw) | prctl forbiden execve |
+| HGAME-week-1 | simple shellcode | Solved | [Click](https://github.com/thj8/pwn/tree/main/hgame/week-1/simple_shellcode) | Read a shellcode and run it |
