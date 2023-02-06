@@ -5,7 +5,8 @@ learn pwn for fun, and pwn **easy** challenge only
 
 | Event | Title | Status | WP | Remark |
 | ----- | ----- | ------ | -- | ------ |
-| DiceCtf-2023| bop | Solved | [Click](https://github.com/thj8/pwn/blob/main/diceCTF-2023/bop/exp.py) | seccomp allow orw syscall|
+| DiceCtf-2023| bop | Solved | [Click](https://github.com/thj8/pwn/blob/main/diceCTF-2023/bop/exp.py) | seccomp allow orw syscall | 
+| idek| Typop | Solved | [Click](https://github.com/thj8/pwn/blob/main/idek/Typop/exp.py) | canary, pie, libc, system stack alignment |
 | HGAME-week-3| large_note| Solved | [Click](https://github.com/thj8/pwn/blob/main/hgame/week-3/large_note/exp.py) | libc2.32 largebin, bk_nextsize, p+0x20 |
 | HGAME-week-3| safe_note| Solved | [Click](https://github.com/thj8/pwn/blob/main/hgame/week-3/safe_note/exp.py) | libc2.32 safe-linking|
 | HGAME-week-1| choose_the_seat | Solved | [Click](https://github.com/thj8/pwn/tree/main/hgame/week-1/choose_the_seat/exp.py) | run binary again, leak libc, onegadget |
