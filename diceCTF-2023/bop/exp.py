@@ -8,7 +8,7 @@ context.os = "linux"
 f_remote = True if "remote" in sys.argv else False
 f_gdb = True if "gdb" in sys.argv else False
 
-vuln_path = "./bop_patch"
+vuln_path = "./bop"
 libc_path = "/glibc-all-in-one/libs/2.31-0ubuntu9.9_amd64/libc.so.6"
 ld_path = "/glibc-all-in-one/libs/2.31-0ubuntu9.9_amd64/ld-2.31.so"
 
