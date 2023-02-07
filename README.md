@@ -5,6 +5,7 @@ learn pwn for fun, and pwn **easy** challenge only
 
 | Event | Title | Status | WP | Remark |
 | ----- | ----- | ------ | -- | ------ |
+| BBCtf| medium_pwn | Solved | [Click](https://github.com/thj8/pwn/blob/main/bbctf/medium_pwn/exp.py) | hex string bytes change | 
 | DiceCtf-2023| bop | Solved | [Click](https://github.com/thj8/pwn/blob/main/diceCTF-2023/bop/exp.py) | seccomp allow orw syscall | 
 | idek| Typop | Solved | [Click](https://github.com/thj8/pwn/blob/main/idek/Typop/exp.py) | canary, pie, libc, system stack alignment |
 | HGAME-week-3| note_context| Solved | [Click](https://github.com/thj8/pwn/blob/main/hgame/week-3/note_context/exp.py) | large_note + context, orw shellcode |
