@@ -8,6 +8,7 @@ learn pwn for fun, and pwn **easy** challenge only
 | BBCtf| medium_pwn | Solved | [Click](https://github.com/thj8/pwn/blob/main/bbctf/medium_pwn/exp.py) | hex string bytes change | 
 | DiceCtf-2023| bop | Solved | [Click](https://github.com/thj8/pwn/blob/main/diceCTF-2023/bop/exp.py) | seccomp allow orw syscall | 
 | idek| Typop | Solved | [Click](https://github.com/thj8/pwn/blob/main/idek/Typop/exp.py) | canary, pie, libc, system stack alignment |
+| nu1l_junior | shellcodeMaster | Solved | [Click](https://github.com/thj8/pwn/blob/main/nu1l_junior/ShellcodeMaster/exp.py) | 17 bytes shellcode, orw |
 | 西湖论剑 | Message_Board | Solved | [Click](https://github.com/thj8/pwn/blob/main/xihulunjian/Message_Board/exp.py) | stack alignment, orw rop |
 | 西湖论剑 | babycalc | Solved | [Click](https://github.com/thj8/pwn/blob/main/xihulunjian/babycalc/exp.py) | ovrewrite one byte, stack alignment |
 | HGAME-week-3| note_context| Solved | [Click](https://github.com/thj8/pwn/blob/main/hgame/week-3/note_context/exp.py) | large_note + context, orw shellcode |
