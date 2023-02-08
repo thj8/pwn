@@ -8,6 +8,7 @@ learn pwn for fun, and pwn **easy** challenge only
 | BBCtf| medium_pwn | Solved | [Click](https://github.com/thj8/pwn/blob/main/bbctf/medium_pwn/exp.py) | hex string bytes change | 
 | DiceCtf-2023| bop | Solved | [Click](https://github.com/thj8/pwn/blob/main/diceCTF-2023/bop/exp.py) | seccomp allow orw syscall | 
 | idek| Typop | Solved | [Click](https://github.com/thj8/pwn/blob/main/idek/Typop/exp.py) | canary, pie, libc, system stack alignment |
+| nu1l_junior | Machine | Todo |  | |
 | nu1l_junior | gotclear | Solved | [Click](https://github.com/thj8/pwn/blob/main/nu1l_junior/gotclear/exp.py) | gottable, run put.plt, execve |
 | nu1l_junior | ShellcodeMaster | Solved | [Click](https://github.com/thj8/pwn/blob/main/nu1l_junior/ShellcodeMaster/exp.py) | 17 bytes shellcode, orw |
 | nu1l_junior | StudentManager | Solved | [Click](https://github.com/thj8/pwn/blob/main/nu1l_junior/StudentManager/exp.py) | Integer Overflow, onegadget |
