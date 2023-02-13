@@ -1,0 +1,3 @@
+My friend keeps writing super insecure C programs but I'm too lazy to fix his code. I'm sure it'll be fine as long as I use enough exploit mitigations, right?
+
+nc lac.tf 31134
