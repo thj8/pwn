@@ -19,10 +19,11 @@ learn pwn for fun, and pwn **easy** challenge only
 | nu1l_junior | StudentManager | Solved | [Click](https://github.com/thj8/pwn/blob/main/nu1l_junior/StudentManager/exp.py) | Integer Overflow, onegadget |
 | 西湖论剑 | Message_Board | Solved | [Click](https://github.com/thj8/pwn/blob/main/xihulunjian/Message_Board/exp.py) | stack pivot, orw rop |
 | 西湖论剑 | babycalc | Solved | [Click](https://github.com/thj8/pwn/blob/main/xihulunjian/babycalc/exp.py) | ovrewrite one byte, stack pivot |
-| HGAME-week-3| note_context| Solved | [Click](https://github.com/thj8/pwn/blob/main/hgame/week-3/note_context/exp.py) | large_note + context, orw shellcode |
-| HGAME-week-3| large_note| Solved | [Click](https://github.com/thj8/pwn/blob/main/hgame/week-3/large_note/exp.py) | libc2.32 largebin, bk_nextsize, p+0x20 |
-| HGAME-week-3| safe_note| Solved | [Click](https://github.com/thj8/pwn/blob/main/hgame/week-3/safe_note/exp.py) | libc2.32 safe-linking|
-| HGAME-week-1| choose_the_seat | Solved | [Click](https://github.com/thj8/pwn/tree/main/hgame/week-1/choose_the_seat/exp.py) | run binary again, leak libc, onegadget |
+| BUUCTF | note_context| Solved | [Click](https://github.com/thj8/pwn/blob/main/buuooj/babyheap_0ctf_2017/exp.py) | chunk overlapping, malloc_hook-0x23, onegadge |
+| HGAME-week-3 | note_context| Solved | [Click](https://github.com/thj8/pwn/blob/main/hgame/week-3/note_context/exp.py) | large_note + context, orw shellcode |
+| HGAME-week-3 | large_note| Solved | [Click](https://github.com/thj8/pwn/blob/main/hgame/week-3/large_note/exp.py) | libc2.32 largebin, bk_nextsize, p+0x20 |
+| HGAME-week-3 | safe_note| Solved | [Click](https://github.com/thj8/pwn/blob/main/hgame/week-3/safe_note/exp.py) | libc2.32 safe-linking|
+| HGAME-week-1 | choose_the_seat | Solved | [Click](https://github.com/thj8/pwn/tree/main/hgame/week-1/choose_the_seat/exp.py) | run binary again, leak libc, onegadget |
 | HGAME-week-1 | overflow | Solved | [Click](https://github.com/thj8/pwn/tree/main/hgame/week-1/overflow/exp.py) | overflow to backdoor |
 | HGAME-week-1 | orw | Solved | [Click](https://github.com/thj8/pwn/tree/main/hgame/week-1/orw/exp.py) | prctl forbiden execve |
 | HGAME-week-1 | simple shellcode | Solved | [Click](https://github.com/thj8/pwn/tree/main/hgame/week-1/simple_shellcode/exp.py) | Read a shellcode and run it |
