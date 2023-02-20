@@ -5,6 +5,8 @@ learn pwn for fun, and pwn **easy** challenge only
 
 | Event | Title | Status | WP | Remark |
 | ----- | ----- | ------ | -- | ------ |
+| VNCTF2023 | Traveler | Solved | [Click](https://github.com/thj8/pwn/blob/main/buuoj/VNCTF2023/Traveler/exp.py) |twice stack pivot, read more |
+| VNCTF2023 | store in tongxunlu | Solved | [Click](https://github.com/thj8/pwn/blob/main/buuoj/VNCTF2023/store%20in%20tongxunlu/exp.py) | syscall, strtol |
 | Lactf | rut-roh-relro | Solved | [Click](https://github.com/thj8/pwn/blob/main/lactf/rut-roh-relro/exp.py) |stack pivot, fmt |
 | Lactf | rickroll | Solved | [Click](https://github.com/thj8/pwn/blob/main/lactf/rickroll/exp.py) | ret2csu, fmtstr |
 | Lactf | bot | Solved | [Click](https://github.com/thj8/pwn/blob/main/lactf/bot/exp.py) | ret2fun |
