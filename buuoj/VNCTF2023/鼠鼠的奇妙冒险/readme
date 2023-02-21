@@ -1,0 +1,1 @@
+ptmalloc2对线程数>CPU核心数*8时会去lock之前的arena并复用； 线程结束时有tcache_thread_shutdown释放掉所有tcache chunks； 合理利用loadLevel调整堆结构；
