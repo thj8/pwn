@@ -21,6 +21,7 @@ learn pwn for fun, and pwn **easy** challenge only
 | nu1l_junior | StudentManager | Solved | [Click](https://github.com/thj8/pwn/blob/main/nu1l_junior/StudentManager/exp.py) | Integer Overflow, onegadget |
 | 西湖论剑 | Message_Board | Solved | [Click](https://github.com/thj8/pwn/blob/main/xihulunjian/Message_Board/exp.py) | stack pivot, orw rop |
 | 西湖论剑 | babycalc | Solved | [Click](https://github.com/thj8/pwn/blob/main/xihulunjian/babycalc/exp.py) | ovrewrite one byte, stack pivot |
+| BUUCTF | EasyHeap_zjctf_2019 | Solved | [Click](https://github.com/thj8/pwn/blob/main/buuoj/ZJCTF-2019-EasyHeap/exp.py) | fastbin fake chunk |
 | BUUCTF | children_tcache | Solved | [Click](https://github.com/thj8/pwn/blob/main/buuoj/hitcon_2018_children_tcache/exp.py) | off-by-null, double free libc2.27 |
 | BUUCTF | babyheap_0ctf_2017 | Solved | [Click](https://github.com/thj8/pwn/blob/main/buuoj/babyheap_0ctf_2017/exp.py) | chunk overlapping, malloc_hook-0x23 |
 | HGAME-week-3 | note_context| Solved | [Click](https://github.com/thj8/pwn/blob/main/hgame/week-3/note_context/exp.py) | large_note + context, orw shellcode |
