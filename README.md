@@ -5,6 +5,7 @@ learn pwn for fun, and pwn **easy** challenge only
 
 | Event | Title | Status | WP | Remark |
 | ----- | ----- | ------ | -- | ------ |
+| pragyan | story | Solved | [Click](https://github.com/thj8/pwn/blob/main/Pragyan/Story/exp.py) | rand |
 | VNCTF2022 | clear_got | Solved | [Click](https://github.com/thj8/pwn/blob/main/buuoj/VNCTF2022/clear_got/exp.py) | write got, syscall |
 | VNCTF2023 | Traveler | Solved | [Click](https://github.com/thj8/pwn/blob/main/buuoj/VNCTF2023/Traveler/exp.py) | twice stack pivot, read more |
 | VNCTF2023 | store in tongxunlu | Solved | [Click](https://github.com/thj8/pwn/blob/main/buuoj/VNCTF2023/store%20in%20tongxunlu/exp.py) | syscall, strtol |
