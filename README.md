@@ -3,7 +3,7 @@ learn pwn for fun, and pwn **easy** challenge only
 
 # Challenge
 
-| Event | Title | Status | WP | Remark |
+| Event | Challenge | Status | WP | Remark |
 | ----- | ----- | ------ | -- | ------ |
 | pragyan | execution | Solved | [Click](https://github.com/thj8/pwn/blob/main/Pragyan/Execution/exp.py) | ret2ROP |
 | pragyan | story | Solved | [Click](https://github.com/thj8/pwn/blob/main/Pragyan/Story/exp.py) | rand |
