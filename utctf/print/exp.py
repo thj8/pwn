@@ -15,8 +15,8 @@ elf, rop = ELF(vuln_path), ROP(vuln_path)
 libc, roplibc = ELF(libc_path), ROP(libc_path)
 
 if not f_remote:
-    #io = process(vuln_path)
-    io = process([ld_path, vuln_path], env={"LD_PRELOAD": libc_path})
+    io = process(vuln_path)
+    #io = process([ld_path, vuln_path], env={"LD_PRELOAD": libc_path})
 else:
     io = remote("puffer.utctf.live", 4630)
 
