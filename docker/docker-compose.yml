@@ -1,0 +1,11 @@
+version: '3.0'
+
+services:
+  webapp:
+    image: pwn_ubuntu_2024:latest
+    container_name: pwn_ubuntu_2024
+    ports:
+      - "2222:22" 
+    volumes:
+      - ./task/:/home/task 
+    restart: unless-stopped

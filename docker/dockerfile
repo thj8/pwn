@@ -24,10 +24,7 @@ RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_confi
 
 # enable login with password
 RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
-
-# defaultly we have a user `ubuntu` in the image
-RUN echo "ubuntu:123456" | chpasswd && \
-    echo "root:123456" | chpasswd
+RUN echo "root:root" | chpasswd
 
 # add sudo
 RUN usermod -aG sudo ubuntu
@@ -41,9 +38,10 @@ RUN echo "#!/bin/sh\nservice ssh restart\nsleep infinity" > /root/start.sh
 RUN chmod +x /root/start.sh
 
 # create venv for pip
-RUN python3 -m venv /pip_venv && \
-    chown -R ubuntu:ubuntu /pip_venv && \
-    echo "\n\n# pip venv\nsource /pip_venv/bin/activate" >> /home/ubuntu/.bashrc
+RUN python3 -m venv /pip_venv
+#&& \
+#    chown -R ubuntu:ubuntu /pip_venv && \
+#    echo "\n\n# pip venv\nsource /pip_venv/bin/activate" >> /home/ubuntu/.bashrc
 
 # pwn-related tools
 RUN mkdir /root/.pip/
@@ -65,16 +63,20 @@ RUN /pip_venv/bin/pip install -U pip && \
     LibcSearcher \
     poetry
 
+# pwndbg
 COPY ./pwndbg /root/pwndbg
 RUN cd /root/pwndbg && chmod +x setup.sh && bash -x setup.sh
 
+# tmux & ZSH
 COPY ./tmux.conf /root/.tmux.conf
-COPY ./tmux.conf /home/ubuntu/.tmux.conf
 COPY ./ohmyzsh_install.sh /tmp/ohmyzsh_install.sh
-RUN sh -c /tmp/ohmyzsh_install.sh
+RUN chmod +x /tmp/ohmyzsh_install.sh && sh -c /tmp/ohmyzsh_install.sh
+RUN chsh -s /bin/zsh root
+COPY ./zsh-autosuggestions /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+COPY ./zsh-syntax-highlighting /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+COPY ./zshrc /root/.zshrc
 
-WORKDIR /home/ubuntu/task
-USER ubuntu
+
+
 
 CMD ["/root/start.sh"]
-
