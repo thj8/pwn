@@ -7,5 +7,5 @@ services:
     ports:
       - "2222:22" 
     volumes:
-      - ./task/:/home/task 
+      - ../tasks/:/home/task 
     restart: unless-stopped
