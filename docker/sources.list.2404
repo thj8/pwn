@@ -1,0 +1,3 @@
+deb [arch=amd64] http://192.168.2.126:8081/repository/ubuntu-noble/ noble main restricted universe multiverse
+deb [arch=amd64] http://192.168.2.126:8081/repository/ubuntu-noble/ noble-updates main restricted universe multiverse
+deb [arch=amd64] http://192.168.2.126:8081/repository/ubuntu-noble/ noble-security main restricted universe multiverse
