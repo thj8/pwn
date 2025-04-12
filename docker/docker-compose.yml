@@ -2,10 +2,11 @@ version: '3.0'
 
 services:
   webapp:
-    image: pwn_ubuntu_2024:latest
-    container_name: pwn_ubuntu_2024
+    image: pwn_ubuntu_2224:latest
+    container_name: pwn_ubuntu_2224
     ports:
       - "2222:22" 
     volumes:
+      - ./glibc-all-in-one:/root/glibc-all-in-one
       - ../tasks/:/home/task 
     restart: unless-stopped

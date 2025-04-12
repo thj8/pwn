@@ -76,6 +76,29 @@ COPY ./zsh-autosuggestions /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 COPY ./zsh-syntax-highlighting /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 COPY ./zshrc /root/.zshrc
 
+# one gadget
+RUN apt install -y ruby-full && gem install one_gadget
+
+# locale
+RUN apt-get install locales && locale-gen en_US.UTF-8 && update-locale
+
+# xclibc
+COPY ./xclibc /usr/local/bin/xclibc
+RUN chmod +x /usr/local/bin/xclibc && apt install -y bc
+
+# nvim
+RUN apt install -y nodejs npm && npm config set registry http://10.100.3.3:8081/repository/npm/ && \
+	npm install -g n
+RUN n lts	
+COPY ./nvim /root/nvim
+RUN mkdir -p /root/.local/share/nvim/site/autoload/ && mkdir -p /root/.config/nvim
+RUN cp /root/nvim/plug.vim /root/.local/share/nvim/site/autoload/
+RUN cp /root/nvim/init.vim /root/.config/nvim
+RUN cp /root/nvim/coc-settings.json /root/.config/nvim
+RUN cp -r /root/nvim/plugged /root/.local/share/nvim/
+RUN mkdir /root/.config/coc
+RUN cp -r /root/nvim/extensions /root/.config/coc
+
 
 
 

