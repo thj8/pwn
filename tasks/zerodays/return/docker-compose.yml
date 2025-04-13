@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  return:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: return:latest
+    privileged: true
+    ports:
+      - "2000:5000"
