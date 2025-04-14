@@ -112,3 +112,12 @@ nnoremap <silent> bu :enew<CR>
 nnoremap <silent> bn :bnext<CR>
 nnoremap <silent> bp :bprevious<CR>
 nnoremap <silent> bd :bdelete<CR>
+
+
+" ==================== tcomment_vim ====================
+nnoremap ci cl
+let g:tcomment_textobject_inlinecomment = ''
+nmap <LEADER>cn g>c
+vmap <LEADER>cn g>
+nmap <LEADER>cu g<c
+vmap <LEADER>cu g<
