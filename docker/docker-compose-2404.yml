@@ -9,4 +9,5 @@ services:
     volumes:
       - ./glibc-all-in-one:/root/glibc-all-in-one
       - ../tasks/:/home/task 
+      - ../../how2heap:/home/how2heap/
     restart: unless-stopped
