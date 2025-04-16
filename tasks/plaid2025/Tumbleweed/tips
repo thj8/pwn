@@ -1,0 +1,7 @@
+The idea for tumbleweed was for people to look at zig allocators to do fun shit across different allocators, so a bunch of unintended solutions is expected. Though, I forgot that resize of 0 is free, so that's definitely unintended lol
+
+The intended is to use the fact that the fixed buffer allocator's resize doesn't actually resize the chunk (only sets the end_index of the backing buffer) to get overlapping chunks, and that smp allocator has a singly linked free list of power-of-2 chunk sizes, which gives you arbitrary write to clear out the burn_count. This gives you as much free as you need to do stack leaks, then libc leak, etc etc (since no PIE)
+
+
+
+

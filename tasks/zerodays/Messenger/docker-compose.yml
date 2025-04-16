@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  arm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: arm:latest
+    ports:
+      - "1337:1337"
