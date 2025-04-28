@@ -1,0 +1,10 @@
+version: '3'
+services:
+  only_read:
+    build: .
+      # image: only_read
+    restart: always
+    ports:
+      - "0.0.0.0:9999:9999"
+    volumes:
+      - ./hashcash:/hashcash
