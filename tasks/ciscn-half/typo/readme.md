@@ -87,3 +87,12 @@ add(io, 13, 0x30)  #两次malloc, 让unb中的指针后移到19节点，里面�
 
 # getshell
 ![](https://r2.20161023.xyz/pic/20250505101419897.png)
+
+
+# 看雪公众号
+!(参考链接)[https://mp.weixin.qq.com/s/d3LVSyws-jrM0llxxI28dQ]
+
+
+![](https://r2.20161023.xyz/pic/20250505171725154.png)
+![](https://r2.20161023.xyz/pic/20250505171827284.png)
+![](https://r2.20161023.xyz/pic/20250505171749380.png)
