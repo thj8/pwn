@@ -1,5 +1,0 @@
-By: theKidOfArcrania
-
-UPDATE: the test.rs is not actually supposed to be added in the pack (dw it doesn't actually leak much abt the solution), but just to let you know that the file won't compile properly in the language
-
-nc stegosaurus.chal.perfect.blue 1337
