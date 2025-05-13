@@ -12,6 +12,9 @@ chunk 指针数组在bss上，可以通过uaf后往tcache里面插一个虚拟ch
 
 # 知识点
 
+## key->0
+在tcache存在0x100时，malloc时， key会被置成0
+
 ## tcache count
 调试发现在tcache 0x90中添加一个节点，发现最后一个0x15212a0无法被申请到，
 
