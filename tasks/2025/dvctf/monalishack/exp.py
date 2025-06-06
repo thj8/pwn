@@ -13,7 +13,7 @@ vuln_path = "./Monalishack"
 elf = ELF(vuln_path)
 
 def get_io():
-    io = process(vuln_path) if not f_remote else remote("a78ff51eded4ce7be39eac9aa1094ff2.chall.dvc.tf", 443, ssl=True)
+    io = process(vuln_path, stdin=PTY, stdout=PTY) if not f_remote else remote("a78ff51eded4ce7be39eac9aa1094ff2.chall.dvc.tf", 443, ssl=True)
     return io
 
 
