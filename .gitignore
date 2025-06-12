@@ -1,5 +1,5 @@
 2.32-0ubuntu3.2_amd64/
-.gdb_history
+*.gdb_history
 core
 .DS_Store
 docker/pwndbg/

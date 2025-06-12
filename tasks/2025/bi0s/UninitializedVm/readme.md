@@ -1,5 +1,6 @@
 # 漏洞点
-memcpy越界写，造成任意地址读写
+memcpy越界写，造成任意地址读写，泄漏heap，libc，stack
+然后改写ret到`pop rdi，"/bin/sh", system`,
 
 # 知识点
 ## scanf("%hd", &var)
@@ -14,19 +15,25 @@ memcpy越界写，造成任意地址读写
 ![](https://r2.20161023.xyz/pic/20250611193404646.png)
 
 - 改rsp的是要要注意，rsp<=rbp 
-
 - 内存值rip, rsb, rbp
 
-# one_gadget
+## one_gadget
 测试发现不可行，改为system("/bin/sh")
 
+## 怎么退出呢？
+改写rip为很大，> buf+len, 此解中改为
+```
+payload += mov_reg(2, 0x7FFFFFFFFFFF)
+payload += push_reg(2)  # rbp
+payload += push_num(0x61)
+```
 
 # debug
 ## v56
 ```
-v56[0]：指令指针（指向当前执行的字节码位置）。
-v56[1]和v56[2]：栈指针和栈顶。
-v56[3]到v56[10]：8个通用寄存器（R0-R7）。
+v56[0]：指令指针（指向当前执行的字节码位置）
+v56[1]和v56[2]：栈指针和栈顶
+v56[3]到v56[10]：8个通用寄存器（R0-R7）
 ```
 
 ## buf
