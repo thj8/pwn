@@ -2,7 +2,7 @@
 fmtstr + shellcode
 
 # debug
-
+```
 00:0000│ rsp 0x7ffee5a0adc0 —▸ 0x7ffee5a0b328 —▸ 0x7ffee5a0c511 ◂— 0x6c6c6168632f2e /* './chall' */
 01:0008│-438 0x7ffee5a0adc8 ◂— 0x100000000
 02:0010│-430 0x7ffee5a0add0 ◂— 0
@@ -15,7 +15,7 @@ pwndbg>
 08:0040│-400 0x7ffee5a0ae00 ◂— 0x1e000a7024 /* '$p\n' */
 09:0048│-3f8 0x7ffee5a0ae08 ◂— 6
 0a:0050│-3f0 0x7ffee5a0ae10 —▸ 0x7ffee5a0af50 —▸ 0x7ffee5a0b210 —▸ 0x7ffee5a0b250 —▸ 0x5645be00cd90 (__do_global_dtors_aux_fini_array_entry) ◂— ...
-
+```
 
   b'(nil)--0x1a0c23d--0x7ffee5a0af50\n'
 
