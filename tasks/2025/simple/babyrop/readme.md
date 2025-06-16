@@ -29,3 +29,11 @@ $
 
 ```
 ![](https://r2.20161023.xyz/pic/20250614183002451.png)
+
+
+# why p64(pop_rcx)*70？
+- to control the rsp,make it to big and big, to prevent program execution failure
+- use gdb , find some `push` in the puts function
+![](https://r2.20161023.xyz/pic/20250616134452737.png)
+![](https://r2.20161023.xyz/pic/20250616134702353.png)
+![](https://r2.20161023.xyz/pic/20250616134816208.png)
