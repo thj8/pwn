@@ -219,7 +219,7 @@ source ${PWNDBG_VENV_PATH}/bin/activate
 pip install uv
 
 # Install dependencies
-uv sync --extra gdb -i http://192.168.2.126:8081/repository/pip/simple/ 
+uv sync --extra gdb -i http://192.168.5.44:8081/repository/pip/simple/ 
 
 if [ -z "$UPDATE_MODE" ]; then
     if grep -qs '^[^#]*source.*pwndbg/gdbinit.py' ~/.gdbinit; then
