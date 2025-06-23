@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "manifest.json": "jsonc",
+        "pages.json": "jsonc",
+        "string": "c",
+        "istream": "c"
+    }
+}
