@@ -1,6 +1,6 @@
 from pwn import *
 
-# context.log_level = "debug"
+context.log_level = "debug"
 context.arch = "amd64"
 context.os = "linux"
 context.terminal = ["/usr/bin/tmux", "sp", "-h"]
