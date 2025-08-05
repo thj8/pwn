@@ -3,6 +3,7 @@
         "manifest.json": "jsonc",
         "pages.json": "jsonc",
         "string": "c",
-        "istream": "c"
+        "istream": "c",
+        "rop": "c"
     }
 }

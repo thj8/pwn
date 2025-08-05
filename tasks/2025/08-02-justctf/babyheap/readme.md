@@ -15,11 +15,12 @@ tcache满了以后，直接进fastbin
 ### size >=0x80
 tcache满了以后，直接进unsortedbin，本题就用了此特性
 
-## 本次有次数限制
-- 要填满tcache首先要7次malloc和7次free
-- 可以修改heap开始的结构体
-
+## 本次malloc有次数限制
+- 要填满tcache首先要7次malloc和7次free，可以修改heap开始的结构体，减少malloc次数
 ![](https://r2.20161023.xyz/pic/20250804111508397.png)
+
+
+- 是否malloc到程序0x4040处，在把其全部指针清空？首先要泄漏elf到base地址
 # getshell
 本地网络延迟大的时候，把`context.log_level = "debug"`注释掉再跑
 ```
