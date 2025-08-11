@@ -1,4 +1,3 @@
-from threading import TIMEOUT_MAX
 from pwn import *
 
 context.log_level = "debug"
