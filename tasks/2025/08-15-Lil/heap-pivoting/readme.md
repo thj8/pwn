@@ -52,16 +52,17 @@ victim =  0x00000000008fb890
 bck = victim->bk = 0x00000000006ccd50
 
 unc->bk = 0x6ccd50
-bck->fd = 0x6ca858（*（0x6ccd60+0x10) = 0x6ca858）
+bck->fd = 0x6ca858（*（0x6ccd50+0x10) = 0x6ca858）
 
 即在此add后，p_chunk[0] = unsorted_chunks(av)
 
-技巧： unsortedbin 第一个chunk的bk设置成p_chunk-0x10, 再add后，p_chunk0=unsorted_chunks(av)
+技巧： unsortedbin 链表最后一个chunk的bk设置成p_chunk-0x10, 再add后，p_chunk0=unsorted_chunks(av)，可以在任意地址写一个堆地址，本题中是静态地址。
 ```
 
 ![](https://r2.20161023.xyz/pic/20250822201218741.png)
 ![](https://r2.20161023.xyz/pic/20250822201715449.png)
-
+以下这个图是后补的，heap的地址不一致，主要说明p_chunk0=0x6ca858
+![](https://r2.20161023.xyz/pic/20250822202622410.png)
 
 
 # 参考
