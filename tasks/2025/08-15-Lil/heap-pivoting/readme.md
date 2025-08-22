@@ -64,6 +64,14 @@ bck->fd = 0x6ca858（*（0x6ccd50+0x10) = 0x6ca858）
 以下这个图是后补的，heap的地址不一致，主要说明p_chunk0=0x6ca858
 ![](https://r2.20161023.xyz/pic/20250822202622410.png)
 
+# magic gadget
+栈迁移， free的是edi就是要释放的指针，如果把_free_hook改为这个，要释放的指针就可以变成rsp了，rsp上面构造orw+rop就可以读取flag了。妙啊，妙啊。
+```
+0x4b8fb8:    xchg   edi,eax
+0x4b8fb9:    xchg   esp,eax
+0x4b8fba:    ret
+```
+![](https://r2.20161023.xyz/pic/20250822203030674.png)
 
 # 参考
 

