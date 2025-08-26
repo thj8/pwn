@@ -5,7 +5,7 @@
 0x000000000040111d : pop rbp ; ret
 ```
 
-栈迁移， 把got表中read的低2个字节改为"\x46\x3a",再打magic_addr,走one_gadgetsss
+栈迁移， 把got表中read的低2个字节改为"\x46\x3a",再打magic_addr,走one_gadgets
 
 # 知识点
 

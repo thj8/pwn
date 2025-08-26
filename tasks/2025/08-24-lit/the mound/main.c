@@ -72,7 +72,7 @@ __int64 __fastcall del(__int64 a1)
 .text:0000000000001454                 mov     rcx, [rbp+var_18]
 .text:0000000000001458                 mov     [rax+rdx*8+8], rcx
 
-给的源代码有问题？
+给的源代码有问题？还是编译器优化过了？估计是优化。
 */
 int del(Rock *rock) {
 	int size = rock->len;
