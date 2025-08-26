@@ -32,6 +32,8 @@ Rock *create(unsigned int size) {
 	rockSize += 16;
 	unsigned int idx = rockSize / 16;
 	
+	// size = 0x3ff / 16 = 63.9375 = 64 越界？
+
 	Rock *available = mound->list[idx];
 	if (available != NULL) {
 		Rock *ret = available;
@@ -54,6 +56,24 @@ Rock *create(unsigned int size) {
 	}
 }
 
+/*
+__int64 __fastcall del(__int64 a1)
+{
+  unsigned int v2; // [rsp+14h] [rbp-4h]
+
+  v2 = (unsigned int)(16 * (*(_DWORD *)a1 / 16) + 16) >> 4;
+  *(_QWORD *)(a1 + 4) = *((_QWORD *)mound + v2 + 1);
+  *((_QWORD *)mound + v2 + 1) = a1;
+  return 0LL;
+}
+
+.text:000000000000144A                 mov     rax, cs:mound
+.text:0000000000001451                 mov     edx, [rbp+var_4]
+.text:0000000000001454                 mov     rcx, [rbp+var_18]
+.text:0000000000001458                 mov     [rax+rdx*8+8], rcx
+
+给的源代码有问题？
+*/
 int del(Rock *rock) {
 	int size = rock->len;
 	unsigned int rockSize = size/16;
