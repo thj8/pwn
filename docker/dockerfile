@@ -69,8 +69,7 @@ RUN cd /root/pwndbg && chmod +x setup.sh && bash -x setup.sh
 
 # tmux & ZSH
 COPY ./tmux.conf /root/.tmux.conf
-COPY ./ohmyzsh_install.sh /tmp/ohmyzsh_install.sh
-RUN chmod +x /tmp/ohmyzsh_install.sh && sh -c /tmp/ohmyzsh_install.sh
+COPY ./oh-my-zsh /root/.oh-my-zsh
 RUN chsh -s /bin/zsh root
 COPY ./zsh-autosuggestions /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 COPY ./zsh-syntax-highlighting /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting

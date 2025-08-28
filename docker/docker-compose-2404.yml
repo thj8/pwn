@@ -2,12 +2,13 @@ version: '3.0'
 
 services:
   webapp:
-    image: pwn_ubuntu_2424:latest
-    container_name: pwn_ubuntu_2424
+    image: pwn_ubuntu_2404:latest
+    container_name: pwn_ubuntu_2404
     ports:
       - "2222:22" 
     volumes:
       - ./glibc-all-in-one:/root/glibc-all-in-one
       - ../tasks/:/home/task 
-      - ../../how2heap:/home/how2heap/
+      - ../../how2heap:/home/how2heap
+      - ../glibc_source:/home/glibc_source
     restart: unless-stopped

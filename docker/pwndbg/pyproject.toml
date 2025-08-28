@@ -101,7 +101,8 @@ select = [
 default-groups = []
 
 [tool.uv.sources]
-pt = { git = "https://github.com/martinradev/gdb-pt-dump", rev = "50227bda0b6332e94027f811a15879588de6d5cb" }
+pt = { path = "/root/pwndbg/gdb-pt-dump" } 
+#pt = { git = "https://github.com/martinradev/gdb-pt-dump", rev = "50227bda0b6332e94027f811a15879588de6d5cb" }
 
 [tool.ruff.lint.flake8-builtins]
 builtins-ignorelist = [
