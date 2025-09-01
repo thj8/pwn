@@ -2,7 +2,6 @@
 *.gdb_history
 core
 .DS_Store
-docker/pwndbg/
 
 *.id0
 *.id1
