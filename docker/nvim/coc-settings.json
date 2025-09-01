@@ -1,3 +1,14 @@
 {
-  "inlayHint.enable": false
+  "inlayHint.enable": false,
+  "coc.preferences.formatOnSave": true,
+  "pyright.inlayHints.variableTypes": false,
+  "pyright.inlayHints.functionReturnTypes": false,
+  "pyright.disableDiagnostics": true,
+  "python.formatting.provider": "yapf",
+  "python.formatting.yapfPath": "/pip_venv/bin/yapf",
+  "python.formatting.yapfArgs": [
+    "--style",
+    "{SPACES_AROUND_POWER_OPERATOR: True, SPACES_BEFORE_COMMENT: 1, COLUMN_LIMIT: 120}"
+  ]
 }
+

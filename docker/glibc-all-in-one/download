@@ -42,7 +42,7 @@ download_single() {
   echo "  -> Extracting libc binary package"
 
   mkdir libs/$id
-  ./extract debs/$deb_name libs/$id
+  bash -x ./extract debs/$deb_name libs/$id
   echo "  -> Package saved to libs/$id"
 
   # download debug info package

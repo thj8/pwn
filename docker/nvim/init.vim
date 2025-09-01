@@ -21,7 +21,8 @@ set softtabstop=2
 set cindent
 set smartindent
 set relativenumber
-highjlight ctermbg=7 guibg=#A9A9A9
+highlight CursorLine ctermbg=7
+
 
 call plug#begin()
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
