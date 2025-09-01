@@ -1,3 +1,5 @@
+# debug
+```
 [*] Here is your shellcode before, ugly and unaesthetic ಠ_ಠ
    0:   6a 68                   push   0x68
    2:   48 b8 2f 62 69 6e 2f 2f 2f 73   movabs rax, 0x732f2f2f6e69622f
@@ -34,7 +36,7 @@
   25:   81 34 24 01 01 01 01    xor    DWORD PTR [rsp], 0x1010101
   2c:   31 f6                   xor    esi, esi
   2e:   31 d2                   xor    edx, edx
-
+```
 
 
 # getshell
