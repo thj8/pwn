@@ -1,5 +1,4 @@
 from pwn import *
-from pwnlib.elf import byte
 
 # context.log_level = "debug"
 context.arch = "amd64"
