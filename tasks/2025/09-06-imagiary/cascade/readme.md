@@ -8,7 +8,7 @@
 
 ## setvbuf
 - libc的setvbuf中存在push rbx， pop rbx, pop r12, pop r13等很多gadget
-- 但是工具`ROPgadget`确查不出来，为什么呢？
+- 但是工具`ROPgadget`确查不出来，为什么呢？需要制定depth？？
 
 ![](https://r2.20161023.xyz/pic/20250916153535633.png)
 ![](https://r2.20161023.xyz/pic/20250916153317389.png)
