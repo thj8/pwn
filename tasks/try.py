@@ -13,8 +13,7 @@ elf = ELF(vuln_path)
 libc = elf.libc
 
 
-
-def ddebug(b=""):
+def ddebug(io, b=""):
     if not f_gdb: return
     gdb.attach(io, gdbscript=b)
     pause()
@@ -24,10 +23,26 @@ def getio():
     io = process([vuln_path]) if not f_remote else remote("", 9999)
     return io
 
+def try_flag(io):
+    io.sendline(b"cat flag.txt")
+    data = io.recv(100, timeout=1)
+    if b"{" in data:
+        log.success(data)
+        sleep(100)
+
+
 def pwn(io):
-    pass
+````### exp start ###
+
+    ### exp end ###
+
+    try_flag(io)
+
+
+
 
 for i in range(0x30):
+    log.success(f"-----------{i}--------------")
     io = None
     try:
         io = getio()
@@ -37,6 +52,3 @@ for i in range(0x30):
     finally:
         if io:
             io.close()
-
-
-
