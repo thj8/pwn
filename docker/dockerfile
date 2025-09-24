@@ -76,14 +76,14 @@ COPY ./zsh-syntax-highlighting /root/.oh-my-zsh/custom/plugins/zsh-syntax-highli
 COPY ./zshrc /root/.zshrc
 
 # one gadget
-RUN apt install -y ruby-full && gem install one_gadget zstd seccomp-tools
+RUN apt install -y ruby-full && gem install one_gadget seccomp-tools
 
 # locale
 RUN apt-get install locales && locale-gen en_US.UTF-8 && update-locale
 
 # xclibc
 COPY ./xclibc /usr/local/bin/xclibc
-RUN chmod +x /usr/local/bin/xclibc && apt install -y bc
+RUN chmod +x /usr/local/bin/xclibc && apt install -y bc zstd
 
 # nvim
 RUN apt install -y nodejs npm && npm config set registry http://10.100.3.3:8081/repository/npm/ && \
