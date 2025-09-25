@@ -1,0 +1,7 @@
+0xf6237 execve("/bin/sh", rbp-0x50, r13)
+  r12 == NULL || {"/bin/sh", r12, NULL} is a valid argv
+0xf6292 execve("/bin/sh", rbp-0x50, [rbp-0x70])
+  rax == NULL || {"/bin/sh", rax, NULL} is a valid argv
+0x11ab5a posix_spawn(rsp+0x64, "/bin/sh", [rsp+0x48], 0, rsp+0x70, [rsp+0xf0])
+0x11ab62 posix_spawn(rsp+0x64, "/bin/sh", [rsp+0x48], 0, rsp+0x70, r14)
+0x11ab67 posix_spawn(rsp+0x64, "/bin/sh", rdx, 0, rsp+0x70, r14)
