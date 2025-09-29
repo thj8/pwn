@@ -1,0 +1,59 @@
+# debug
+```
+struct profile {
+    int id;
+    char username[32];
+    size_t bio_len;
+    char *bio;
+};
+```
+
+```
+tcachebins
+0x20 [  7]: 0x555ef2e00d30 —▸ 0x555ef2e01060 —▸ 0x555ef2e01200 —▸ 0x555ef2e01380 —▸ 0x555ef2e011e0 —▸ 0x555ef2e01490 —▸ 0x555ef2e00e40 ◂— 0
+0x30 [  2]: 0x555ef2e00300 —▸ 0x555ef2e00460 ◂— 0
+0x40 [  4]: 0x555ef2e009a0 —▸ 0x555ef2e00670 —▸ 0x555ef2e00ad0 —▸ 0x555ef2e007a0 ◂— 0
+0x60 [  2]: 0x555ef2e002a0 —▸ 0x555ef2e014b0 ◂— 0
+0x70 [  7]: 0x555ef2e010f0 —▸ 0x555ef2e00c40 —▸ 0x555ef2e00e60 —▸ 0x555ef2e01080 —▸ 0x555ef2e01220 —▸ 0x555ef2e013a0 —▸ 0x555ef2e00d50 ◂— 0
+0x80 [  7]: 0x555ef2e00ba0 —▸ 0x555ef2e00f40 —▸ 0x555ef2e00cb0 —▸ 0x555ef2e00fe0 —▸ 0x555ef2e01160 —▸ 0x555ef2e01410 —▸ 0x555ef2e00dc0 ◂— 0
+0xd0 [  2]: 0x555ef2e007e0 —▸ 0x555ef2e00350 ◂— 0
+0xf0 [  6]: 0x555ef2e006b0 —▸ 0x555ef2e00490 —▸ 0x555ef2e008b0 —▸ 0x555ef2e00580 —▸ 0x555ef2e01290 —▸ 0x555ef2e009e0 ◂— 0
+fastbins
+0x20: 0x555ef2e00320 —▸ 0x555ef2e00410 —▸ 0x555ef2e00430 —▸ 0x555ef2e00b00 —▸ 0x555ef2e00c10 —▸ 0x555ef2e00fb0 ◂— 0
+0x70: 0x555ef2e00b20 —▸ 0x555ef2e00ec0 ◂— 0
+unsortedbin
+empty
+smallbins
+empty
+largebins
+empty
+
+```
+
+
+# seccomp
+```
+ 0000: 0x20 0x00 0x00 0x00000004  A = arch
+ 0001: 0x15 0x00 0x07 0xc000003e  if (A != ARCH_X86_64) goto 0009
+ 0002: 0x20 0x00 0x00 0x00000000  A = sys_number
+ 0003: 0x35 0x00 0x01 0x40000000  if (A < 0x40000000) goto 0005
+ 0004: 0x15 0x00 0x04 0xffffffff  if (A != 0xffffffff) goto 0009
+ 0005: 0x15 0x02 0x00 0x0000003b  if (A == execve) goto 0008
+ 0006: 0x15 0x01 0x00 0x00000142  if (A == execveat) goto 0008
+ 0007: 0x06 0x00 0x00 0x7fff0000  return ALLOW
+ 0008: 0x06 0x00 0x00 0x80000000  return KILL_PROCESS
+ 0009: 0x06 0x00 0x00 0x00000000  return KILL
+
+```
+
+
+# debug
+
+![](https://r2.20161023.xyz/pic/20250928214919113.png)
+
+获取flag文件名
+![](https://r2.20161023.xyz/pic/20250928231449079.png)
+
+
+# getshell
+![](https://r2.20161023.xyz/pic/20250928233641809.png)
