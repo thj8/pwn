@@ -11,7 +11,7 @@ f_gdb = True if "gdb" in sys.argv else False
 vuln_path = "./pwn"
 elf = ELF(vuln_path)
 libc = elf.libc
-rop = ROP(libc)
+
 
 io = process([vuln_path]) if not f_remote else remote("", 9999)
 

