@@ -45,7 +45,10 @@ empty
  0009: 0x06 0x00 0x00 0x00000000  return KILL
 
 ```
+# 学习到的知识点
 
+## 参考链接
+[点我跳转](https://github.com/Hazy0189/ctf-archieve/blob/9770f8090a58bb2f7c00b4f18e123c134c8260a2/CTFTime/2025/Iran%20Tech%20Olympics%20CTF%202025/account_management/exploit.py#L135)
 
 # debug
 

