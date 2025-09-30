@@ -1,3 +1,7 @@
+# 漏洞点
+- 当用户名重名的时候，存在UAF漏洞
+
+
 # debug
 ```
 struct profile {
@@ -46,6 +50,7 @@ empty
 
 ```
 # 学习到的知识点
+"getdents" 是一个系统调用（system call）在一些类Unix操作系统中用于获取目录中的条目列表。它接受一个文件描述符和一个缓冲区作为参数，并从目录中读取目录项的信息到缓冲区中。目前我觉得的用处只有当我做pwn题目的时候，有可能flag文件不叫flag，这样你orw的时候就打不开，就要利用这个函数先找到flag的名称是什么。
 
 ## 参考链接
 [点我跳转](https://github.com/Hazy0189/ctf-archieve/blob/9770f8090a58bb2f7c00b4f18e123c134c8260a2/CTFTime/2025/Iran%20Tech%20Olympics%20CTF%202025/account_management/exploit.py#L135)

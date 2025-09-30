@@ -9,3 +9,4 @@ core
 *.nam
 *.til
 
+glibc_source/glibcs

